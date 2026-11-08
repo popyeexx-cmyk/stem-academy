@@ -2,7 +2,7 @@
 
 **Review date:** 8 November 2026  
 **Branch:** `build/frontend-foundation`  
-**Reviewed artifact:** `docs/FIRESTORE_DATA_MODEL.md` and the currently approved project scope/decisions  
+**Reviewed artifacts:** `docs/FIRESTORE_DATA_MODEL.md`, `docs/ROLE_PERMISSION_MATRIX.md` and the currently approved project scope/decisions  
 **Status:** Review findings only — no Firebase project, production data or deployment was changed.
 
 ## 1. Executive assessment
@@ -131,7 +131,7 @@ That older prompt must not silently override the later approved STEM Academy Mas
 
 ## 7. Recommended next sequence
 
-1. Close the remaining owner choices in Section 4, then finalize the server-side admin/teacher/subject permission matrix.
+1. Close the remaining owner choices in Section 4 and implement the approved baseline in `docs/ROLE_PERMISSION_MATRIX.md`.
 2. Finalize the password recovery and session rollover workflows.
 3. Specify the API permission matrix and server-side validation rules.
 4. Implement schema/ID allocation helpers with unit tests.
