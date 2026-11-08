@@ -1,0 +1,19 @@
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // STEM Academy v1.1.0
+    //
+    // Initial policy:
+    // No direct browser reads or writes.
+    //
+    // Server-side Firebase Admin SDK operations
+    // are separately authorized by the API.
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
