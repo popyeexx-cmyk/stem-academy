@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "node --test",
-    "check": "node --check netlify/functions/api.mjs && node --check netlify/functions/lib/firebase-admin.mjs && node --check netlify/functions/lib/auth-middleware.mjs && node --test tests/frontend/static-assets.test.mjs"
+    "check": "node --check netlify/functions/api.mjs && node --check netlify/functions/lib/firebase-admin.mjs && node --check netlify/functions/lib/auth-middleware.mjs && node --check netlify/functions/lib/authorization.mjs && node --test tests/frontend/static-assets.test.mjs"
   },
   "dependencies": {
     "firebase-admin": "^13.5.0"
