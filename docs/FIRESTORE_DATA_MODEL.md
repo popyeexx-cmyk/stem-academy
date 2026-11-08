@@ -127,7 +127,7 @@ The following must be confirmed or explicitly accepted as launch blockers:
 3. **CONFIRMED — Assessment retakes:** One initial attempt is allowed; every additional attempt requires explicit teacher/admin approval.
 4. **CONFIRMED — Password recovery:** Admin-assisted recovery. The student contacts the teacher/admin, who verifies identity and initiates a secure admin-only recovery process. The no-email constraint means the safe reset-link/code hand-off still needs to be designed and tested before implementation.
 5. **CONFIRMED — Academy timezone:** Pakistan Standard Time (`Asia/Karachi`, UTC+05:00). Calendar dates and scheduled times use this academy timezone; store absolute timestamps consistently using UTC/server timestamps.
-6. Academic session naming and promotion/archiving process.
+6. **CONFIRMED — Academic sessions:** Annual sessions named by calendar year (for example, `2026`, `2027`), with separate Grade 9 and Grade 10 classes in each session. The student promotion and archival process still needs to be defined.
 7. Student identifier and the minimum profile/contact fields to collect.
 8. Backup/export method, frequency and who is responsible.
 9. Data-retention period and account closure/archive procedure.
