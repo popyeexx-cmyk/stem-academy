@@ -130,7 +130,7 @@ The following must be confirmed or explicitly accepted as launch blockers:
 6. **CONFIRMED — Academic sessions:** Annual sessions named by calendar year (for example, `2026`, `2027`), with separate Grade 9 and Grade 10 classes in each session. The student promotion and archival process still needs to be defined.
 7. **CONFIRMED — Student identifier:** Generate an academy ID in the format `SA-YYYY-NNN` (for example, `SA-2026-001`) on the trusted server. IDs must be unique academy-wide, non-editable by students and must not be based on national identity numbers.
 8. **CONFIRMED — Minimum student profile:** Full name, academy-generated Student ID, email address, grade/class association and active/inactive status only. Grade/class association is maintained through trusted class records/access. No guardian details, phone numbers, home addresses, identity numbers, photographs or other extra personal fields by default.
-8. Backup/export method, frequency and who is responsible.
+8. **CONFIRMED — Backup approach:** Manual admin-initiated data export. The export format, scope, frequency, secure storage location and restore procedure must be defined and tested before production.
 9. Data-retention period and account closure/archive procedure.
 10. Hosting provider, free-tier terms, eligibility and serverless runtime compatibility.
 11. Any required at-risk indicator thresholds; no opaque or automatic disciplinary decisions.
