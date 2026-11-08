@@ -198,3 +198,8 @@ Do not create a production Firebase project, enable student access, import real 
 ## Login protection
 
 **CONFIRMED — Login protection:** After 5 consecutive failed sign-in attempts, temporarily lock the student account for 15 minutes. An administrator may unlock it earlier only after verifying the student's identity in person. Track failed attempts and lockout state securely on the server; do not trust client-side counters, expose account-sensitive details in login errors, or log passwords. Apply rate limiting to reduce automated guessing and test lockout, expiry and admin-unlock behaviour.
+
+
+## Staff password policy
+
+**CONFIRMED — Staff password policy:** Administrator and teacher passwords must contain at least 12 characters. Do not impose arbitrary periodic password expiry. Only the administrator may reset a teacher's password; staff reset procedures must use a secure, verified administrative handoff and must never expose or log passwords. Staff must be required to change any temporary password at next sign-in. The administrator's own recovery must use a separately documented owner-verification/recovery procedure to avoid lockout of the academy.
