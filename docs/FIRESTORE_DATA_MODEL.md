@@ -133,7 +133,7 @@ The following must be confirmed or explicitly accepted as launch blockers:
 8. **CONFIRMED — Backup approach:** Manual admin-initiated data export. The export format, scope, frequency, secure storage location and restore procedure must be defined and tested before production.
 9. **CONFIRMED — Retention policy:** Retain records indefinitely by default; archive inactive students and preserve historical attendance, assignments and results with access restricted to authorized staff. This remains subject to applicable privacy/legal requirements and approved deletion requests.
 10. **PROVISIONALLY SELECTED — Hosting provider:** Netlify Free, subject to account eligibility, current 300-credit usage model, supported Node.js runtime, deployed test, Firebase integration and realistic usage verification before production.
-11. Any required at-risk indicator thresholds; no opaque or automatic disciplinary decisions.
+11. **CONFIRMED — Student performance indicators:** Teachers define the attendance and assessment thresholds used to flag students who may need additional academic support. Flags are advisory prompts for teacher review only; they must not trigger automatic disciplinary action, student restrictions, or consequential decisions. Thresholds must be visible, editable by authorized teachers/admins, and documented with their effective dates.
 
 Do not create a production Firebase project, enable student access, import real records or deploy this schema until the relevant decisions and provider constraints are reviewed.
 
@@ -146,7 +146,14 @@ Do not create a production Firebase project, enable student access, import real 
 - **Before approval:** verify account/team eligibility and current dashboard terms; pin a supported Node runtime; deploy only a non-production test site; test the API and Firebase Admin initialization using a separate test Firebase project; measure realistic usage; confirm the site pauses safely at the free limit; and document a no-cost rollback/hosting alternative. Do not enable real student access or deploy production data until these checks pass.
 - Official references checked 8 November 2026: [Netlify pricing](https://www.netlify.com/pricing/), [How credits work](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/how-credits-work/), [Functions configuration and Node.js runtime](https://docs.netlify.com/build/functions/configuration/), [Node.js 24 default announcement](https://www.netlify.com/changelog/2026-07-07-nodejs-24-default-new-sites/).
 
-## 13. Implementation sequence after approval
+## 13. Student performance indicators
+
+- **CONFIRMED — Teacher-defined thresholds:** Authorized teachers define attendance and assessment thresholds. The system may flag students for teacher review when those thresholds are met.
+- A flag is an advisory support signal, not a diagnosis, grade, disciplinary finding or automatic decision. A teacher must review the underlying records and decide whether any supportive action is appropriate.
+- Do not automatically penalize students, change marks, restrict access, notify guardians or label students as failing/risk categories solely because a threshold was crossed.
+- Store the threshold settings, who changed them and when. Show the underlying attendance/assessment period and values alongside each flag so staff can interpret it fairly.
+
+## 14. Implementation sequence after approval
 
 1. Confirm the open decisions and finalize this model.
 2. Add schema validation helpers and role/class authorization helpers.
