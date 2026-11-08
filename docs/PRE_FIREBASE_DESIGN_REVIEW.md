@@ -19,7 +19,8 @@ The following are confirmed and should be treated as requirements, not suggestio
 
 | Area | Confirmed rule |
 |---|---|
-| Staff accounts and permissions | Separate administrator and teacher accounts; teacher access is limited to assigned classes and subjects. |\n| Result visibility | Marks remain hidden until a teacher/admin separately publishes/releases them. |
+| Staff accounts and permissions | Separate administrator and teacher accounts; teacher access is limited to assigned classes and subjects. |
+| Result visibility | Marks remain hidden until a teacher/admin separately publishes/releases them. |
 | Online assignment completion | Passing does not complete the assignment; teacher/admin approval is required. |
 | Assessment retakes | One initial attempt; every additional attempt requires teacher/admin approval. |
 | Password recovery | Admin-assisted; identity must be checked before recovery. |
@@ -93,8 +94,7 @@ These are the remaining questions or technical proofs. They are not reasons to s
 
 | # | Blocker | Required resolution |
 |---|---|---|
-| 1 | Staff role arrangement | Confirm whether the single staff account is admin-only with teaching permissions or whether separate admin and teacher accounts are required. |
-| 2 | Email verification | Decide whether student email must be verified before activation; define email-change synchronization. |
+| 1 | Email verification | Decide whether student email must be verified before activation; define email-change synchronization. |
 | 2 | Password recovery hand-off | Approve and test the secure no-email recovery mechanism. |
 | 3 | Session rollover | Define promotion, repeaters, transfers, Grade 10 completion and archive steps. |
 | 4 | Student ID allocator | Implement and test transaction-safe, never-recycled ID issuance. |
