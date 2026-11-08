@@ -28,6 +28,7 @@ const pageDescriptions = {
 function renderPage(page) {
   const safePage = pageTitles[page] ? page : "dashboard";
   if (safePage === "assignments") { window.location.href = "/assignments.html"; return; }
+  if (safePage === "assessments") { window.location.href = "/assessments.html"; return; }
   if (safePage === "subjects") { window.location.href = "/subjects.html"; return; }
   if (safePage === "classes") {
     window.location.href = "/classes.html";
