@@ -34,6 +34,7 @@ function renderPage(page) {
   if (safePage === "communication") { window.location.href = "/communication.html"; return; }
   if (safePage === "activity") { window.location.href = "/activity-logs.html"; return; }
   if (safePage === "profile") { window.location.href = "/profile.html"; return; }
+  if (safePage === "settings") { window.location.href = "/settings.html"; return; }
   if (safePage === "subjects") { window.location.href = "/subjects.html"; return; }
   if (safePage === "classes") {
     window.location.href = "/classes.html";
