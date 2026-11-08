@@ -171,6 +171,7 @@ Do not create a production Firebase project, enable student access, import real 
 - A flag is an advisory support signal, not a diagnosis, grade, disciplinary finding or automatic decision. The flag should show the selected observation period and the underlying attendance/assessment values. A teacher must review the underlying records and decide whether any supportive action is appropriate.
 - Do not automatically penalize students, change marks, restrict access, notify guardians or label students as failing/risk categories solely because a threshold was crossed.
 - Store the threshold settings, who changed them and when. Show the underlying attendance/assessment period and values alongside each flag so staff can interpret it fairly.
+- **CONFIRMED — Recalculation timing:** Recalculate support indicators whenever a relevant attendance or assessment record changes, and whenever a teacher changes the applicable threshold or review period. Recalculation is request/event-driven within normal API operations; do not introduce cron jobs, scheduled functions, polling or background workers.
 
 ## 15. Academic-session rollover procedure
 
