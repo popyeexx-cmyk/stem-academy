@@ -22,7 +22,7 @@
 
 | Collection | Document ID | Purpose and key fields |
 |---|---|---|
-| `users` | Firebase Auth UID | `role`, `active`, `displayName`, optional approved student profile fields, `createdAt`, `updatedAt` |
+| `users` | Firebase Auth UID | `role`, `active`, `displayName` (student full name), `email`, `studentId` (academy-generated for students), `createdAt`, `updatedAt`; avoid collecting extra profile fields unless a documented need is approved |
 | `classes` | Stable class ID | `name`, `grade`, `academicSessionId`, `active`, timestamps |
 | `classAccess` | Deterministic class/user ID | `classId`, `userUid`, `accessType` (teacher or student), `active`, timestamps |
 | `academicSessions` | Stable session ID | `name`, `startsOn`, `endsOn`, `active` |
@@ -128,7 +128,8 @@ The following must be confirmed or explicitly accepted as launch blockers:
 4. **CONFIRMED — Password recovery:** Admin-assisted recovery. The student contacts the teacher/admin, who verifies identity and initiates a secure admin-only recovery process. The no-email constraint means the safe reset-link/code hand-off still needs to be designed and tested before implementation.
 5. **CONFIRMED — Academy timezone:** Pakistan Standard Time (`Asia/Karachi`, UTC+05:00). Calendar dates and scheduled times use this academy timezone; store absolute timestamps consistently using UTC/server timestamps.
 6. **CONFIRMED — Academic sessions:** Annual sessions named by calendar year (for example, `2026`, `2027`), with separate Grade 9 and Grade 10 classes in each session. The student promotion and archival process still needs to be defined.
-7. **CONFIRMED — Student identifier:** Generate an academy ID in the format `SA-YYYY-NNN` (for example, `SA-2026-001`) on the trusted server. IDs must be unique academy-wide, non-editable by students and must not be based on national identity numbers. The minimum profile/contact fields to collect remain to be decided.
+7. **CONFIRMED — Student identifier:** Generate an academy ID in the format `SA-YYYY-NNN` (for example, `SA-2026-001`) on the trusted server. IDs must be unique academy-wide, non-editable by students and must not be based on national identity numbers.
+8. **CONFIRMED — Minimum student profile:** Full name, academy-generated Student ID, email address, grade/class association and active/inactive status only. Grade/class association is maintained through trusted class records/access. No guardian details, phone numbers, home addresses, identity numbers, photographs or other extra personal fields by default.
 8. Backup/export method, frequency and who is responsible.
 9. Data-retention period and account closure/archive procedure.
 10. Hosting provider, free-tier terms, eligibility and serverless runtime compatibility.
