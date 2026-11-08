@@ -31,7 +31,7 @@ The following are confirmed and should be treated as requirements, not suggestio
 | Backups | Manual admin-initiated export; secure storage and tested restoration required. |
 | Retention | Retain records indefinitely by default; archive inactive students and preserve history, subject to applicable privacy/legal requirements. |
 | Hosting | Netlify Free is provisionally selected, not yet approved for production. |
-| Student support indicators | Teacher-defined attendance and assessment thresholds; flags are advisory and require teacher review. |
+| Student support indicators | Teachers define attendance/assessment warning thresholds and review periods. Suggested examples: attendance below 75%, assessment below 40%, reviewed over the current academic month. Configurable; flags are advisory only and require teacher review. |
 
 ## 3. Review findings and design corrections
 
@@ -102,7 +102,7 @@ These are the remaining questions or technical proofs. They are not reasons to s
 | 2 | Password recovery hand-off | Approve and test the secure no-email recovery mechanism. |
 | 3 | Session rollover implementation | Implement and test the approved manual administrator workflow, including confirmation summary, historical record preservation, audit events and safe retry/partial-failure handling. |
 | 4 | Student ID allocator | Implement and test transaction-safe, never-recycled ID issuance. |
-| 5 | Support-indicator rules | Define assessment/attendance observation periods, minimum data requirements and how often teachers review flags. |
+| 5 | Support-indicator rules | **POLICY APPROVED:** teachers configure attendance/assessment warning thresholds and review periods; suggested examples are below 75% attendance, below 40% assessment performance, and the current academic month. Flags are advisory only. Technical details still needed: minimum data before flagging and how often flags are recalculated/reviewed. |
 | 6 | Backup/restore | Approve export format, included collections, frequency, secure storage, encryption/access controls and a tested restore procedure. |
 | 7 | Netlify runtime and free-tier proof | Pin exact Node.js version and complete a non-production deployment/usage test. |
 | 8 | Firebase test environment | Create a separate test project only after the preceding choices; use no real student data. |
