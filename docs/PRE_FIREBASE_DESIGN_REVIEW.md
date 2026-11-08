@@ -28,6 +28,7 @@ The following are confirmed and should be treated as requirements, not suggestio
 | Academic sessions and rollover | Annual sessions named by calendar year, with separate Grade 9 and Grade 10 classes. The administrator manually confirms promotion, repetition, Grade 10 completion/archive or transfer/inactive status; no automatic rollover. Permanent SIDs and historical records are preserved. |
 | Student ID | Permanent server-generated `SA-YYYY-NNN`; year is first enrollment/ID-issuance year. |
 | Student profile and login | Full name, permanent SID, internal Firebase alias, grade/class association and active/inactive status only. A real contact email is not required. Students sign in with SID and password. |
+| Staff login and provisioning | Separate administrator/teacher accounts; unique academy-issued Staff IDs and Staff ID/password login; no self-registration or shared accounts. Owner/designated authority provisions the first admin; admin creates and activates teacher accounts. Internal Firebase aliases require synthetic-account compatibility testing. |
 | Backups | Administrator can export on demand; weekly backup reminder; include academic records and exclude credentials/secrets; secure storage and successful test restoration required before real data. |
 | Retention | Retain records indefinitely by default; archive inactive students and preserve history, subject to applicable privacy/legal requirements. |
 | Hosting | Netlify Free is provisionally selected, not yet approved for production. |
@@ -161,3 +162,8 @@ That older prompt must not silently override the later approved STEM Academy Mas
 ### Administrator account recovery
 
 **POLICY APPROVED:** The academy owner/designated authority verifies the administrator's identity in person using a documented process independent of the locked account. An authorized Firebase project owner/technical custodian then restores administrator access through the official project administration interface. Provider/project-owner recovery credentials must be secured separately from the LMS, with an offline recovery record and restricted access. Do not send recovery secrets through ordinary email or messaging, and never store passwords, reset links, recovery codes or provider credentials in application data or logs. Record only the verifier, authorized operator, action and timestamp. The procedure must be rehearsed using synthetic accounts before production, and Firebase project ownership must not depend solely on the administrator's LMS account.
+
+
+### Staff login and account provisioning
+
+**POLICY APPROVED:** Each administrator/teacher has a separate account and unique academy-issued Staff ID; staff sign in using Staff ID and password. No shared accounts or self-registration. The academy owner/designated authority provisions the first administrator; the administrator creates and activates teacher accounts. Staff may use deterministic internal Firebase aliases derived from Staff IDs, but compatibility with the reserved non-deliverable domain must be tested using synthetic accounts in the separate test project. The alias is not a contact address and must not receive email. If Firebase rejects the domain, pause for design review. Staff IDs are unique and immutable. Teacher password resets remain administrator-only; administrator recovery follows the owner-verified process above.
