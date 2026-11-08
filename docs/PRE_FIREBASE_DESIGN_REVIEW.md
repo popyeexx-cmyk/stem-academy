@@ -19,7 +19,7 @@ The following are confirmed and should be treated as requirements, not suggestio
 
 | Area | Confirmed rule |
 |---|---|
-| Staff accounts and permissions | Separate administrator and teacher accounts; teacher access is limited to assigned classes and subjects. |
+| Staff accounts and permissions | Separate administrator and teacher accounts. The administrator may assign multiple subjects to the same teacher, across classes/grades if needed; each teacher's access is limited to the exact assigned class/subject combinations. |
 | Result visibility | Marks remain hidden until a teacher/admin separately publishes/releases them. |
 | Online assignment completion | Passing does not complete the assignment; teacher/admin approval is required. |
 | Assessment retakes | One initial attempt; every additional attempt requires teacher/admin approval. |
@@ -58,7 +58,7 @@ Firebase Authentication should be the source of truth for the login email. If th
 
 ### 3.5 Admin/teacher role model
 
-**RESOLVED — Separate staff accounts:** The owner confirmed two different staff accounts: one administrator and one teacher. The administrator has academy-wide user, class, settings and permission management. The teacher has teaching permissions only for explicitly assigned classes and subjects. The server must check both class access and subject-specific teaching assignments for teacher actions. Keep the roles separate; do not share credentials or grant teacher access to admin-only operations.
+**RESOLVED — Separate staff accounts and multi-subject assignment:** The owner confirmed two different staff accounts: one administrator and one teacher. The administrator has academy-wide user, class, settings and permission management, including the ability to assign multiple subjects to the same teacher, across different classes/grades where needed. The teacher has teaching permissions only for the exact class/subject combinations assigned by the administrator. The server must check both class access and subject-specific teaching assignments for teacher actions. Keep the roles separate; do not share credentials or grant teacher access to admin-only operations.
 
 ### 3.6 Password recovery without email delivery
 
