@@ -1,5 +1,3 @@
-import { API_ERRORS } from "./errors.mjs";
-
 function deny() {
   throw new Error("FORBIDDEN");
 }
