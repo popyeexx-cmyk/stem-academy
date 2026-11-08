@@ -27,6 +27,10 @@ const pageDescriptions = {
 
 function renderPage(page) {
   const safePage = pageTitles[page] ? page : "dashboard";
+  if (safePage === "classes") {
+    window.location.href = "/classes.html";
+    return;
+  }
   document.querySelectorAll("[data-page]").forEach(link => {
     link.classList.toggle("active", link.dataset.page === safePage);
   });
