@@ -70,7 +70,7 @@ The attempt count, retake approval details and result-release workflow must be c
 
 - Physical task assignments record teacher review/completion; students do not upload files.
 - Online activity assignments may reference a short assessment (maximum 10 questions) and an adjustable passing threshold (proposed default 70%, subject to the approved specification).
-- Passing an online activity does not automatically complete the assignment. Teacher/admin completion approval is required.
+- **CONFIRMED — Completion approval:** Passing an online activity does not automatically complete the assignment. A teacher/admin must review and explicitly approve completion before the assignment is marked complete. This decision was confirmed by the project owner on 8 November 2026.
 - Opening an external resource is not proof that it was read or watched.
 - Assignment records are per student, even when the assignment is distributed to a whole class.
 
@@ -116,7 +116,7 @@ The current API contains only health and authenticated-session routes. This docu
 
 The following must be confirmed or explicitly accepted as launch blockers:
 1. **CONFIRMED — Result visibility:** Students may see assessment marks only after a teacher/admin separately publishes/releases the result. Teacher approval alone is not sufficient. This decision was confirmed by the project owner on 8 November 2026.
-2. Whether passing an online activity ever changes assignment status automatically; the proposed rule is **no**, teacher approval remains required.
+2. **CONFIRMED — Assignment completion:** Passing an online activity does not automatically change the assignment to complete; teacher/admin review and explicit approval are required.
 3. Assessment retake policy beyond the initial attempt and approved second attempt.
 4. Password recovery method compatible with the no-email/no-paid-service constraint.
 5. Academy timezone and date-handling convention.
