@@ -87,7 +87,7 @@ The attempt count, retake approval details and result-release workflow must be c
 - Store server-generated `createdAt`/`updatedAt` timestamps separately from the attendance date.
 - One student should have at most one effective attendance record per class/date. Corrections update the current value and preserve who changed it, when, and the prior value.
 - Attendance calculations must exclude non-attendance days.
-- The academy timezone remains an open decision; do not treat the example `Asia/Karachi` in `.env.example` as an approved final choice until confirmed.
+- **CONFIRMED — Academy timezone:** Use Pakistan Standard Time, IANA timezone `Asia/Karachi` (UTC+05:00), for attendance dates, assignment deadlines and assessment schedules. Store absolute event timestamps consistently (UTC/server timestamps) and interpret/display academy calendar dates and times in `Asia/Karachi`.
 
 ## 8. Audit and privacy
 
@@ -126,7 +126,7 @@ The following must be confirmed or explicitly accepted as launch blockers:
 2. **CONFIRMED — Assignment completion:** Passing an online activity does not automatically change the assignment to complete; teacher/admin review and explicit approval are required.
 3. **CONFIRMED — Assessment retakes:** One initial attempt is allowed; every additional attempt requires explicit teacher/admin approval.
 4. **CONFIRMED — Password recovery:** Admin-assisted recovery. The student contacts the teacher/admin, who verifies identity and initiates a secure admin-only recovery process. The no-email constraint means the safe reset-link/code hand-off still needs to be designed and tested before implementation.
-5. Academy timezone and date-handling convention.
+5. **CONFIRMED — Academy timezone:** Pakistan Standard Time (`Asia/Karachi`, UTC+05:00). Calendar dates and scheduled times use this academy timezone; store absolute timestamps consistently using UTC/server timestamps.
 6. Academic session naming and promotion/archiving process.
 7. Student identifier and the minimum profile/contact fields to collect.
 8. Backup/export method, frequency and who is responsible.
