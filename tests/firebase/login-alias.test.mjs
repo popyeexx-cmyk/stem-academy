@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { academyIdToAuthEmail } from "../../netlify/functions/lib/login-alias.mjs";
+import { academyIdToAuthEmail } from "../../public/assets/js/login-alias.mjs";
 
 test("converts student academy IDs", () => {
   assert.equal(
