@@ -97,3 +97,25 @@ Test at least one synthetic alias such as `sa-2026-001@students.stemacademy.inva
 No production Firebase project, production database, real student accounts, real student records, billing account, paid upgrade, Cloud Functions, scheduled jobs, background workers, email delivery, SMS, WhatsApp, file uploads or public deployment is authorized by this test-stage plan.
 
 **Next milestone:** run the local Authentication and Firestore emulators using the demo project ID, then implement and test the first isolated Firebase integration against synthetic data.
+
+
+## 5A. Firebase Admin emulator smoke test
+
+The backend now supports an explicit, isolated emulator configuration. When either emulator host variable is set, both Auth and Firestore hosts must be present and the project ID must begin with `demo-`. In this mode the Admin SDK initializes without a service-account key. It does not fall back to live credentials.
+
+After the emulators are running in one PowerShell window, open a second PowerShell window in the project root. Install the project dependencies if they are not already installed:
+
+```powershell
+npm install
+```
+
+Then configure only the local demo project in that second window:
+
+```powershell
+$env:FIREBASE_ADMIN_PROJECT_ID = "demo-stem-academy"
+$env:FIREBASE_AUTH_EMULATOR_HOST = "127.0.0.1:9099"
+$env:FIRESTORE_EMULATOR_HOST = "127.0.0.1:8080"
+node --test tests/firebase/emulator-smoke.test.mjs
+```
+
+The smoke test creates one synthetic Auth user and one temporary Firestore document, verifies both, then deletes them. It uses a reserved example.test address, not a real person or a student alias. The test is skipped when the three emulator environment settings are not present. Do not add these local environment variables or any credentials to GitHub.
