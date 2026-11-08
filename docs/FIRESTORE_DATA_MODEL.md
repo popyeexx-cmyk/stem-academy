@@ -53,7 +53,14 @@ Deterministic IDs should use an unambiguous encoding or a stable hash of the com
 - Only an admin may create/deactivate users, assign roles, create classes or change class access. The last active admin must not be deactivated or demoted.
 - A teacher must not gain access to another class by changing a URL, query parameter or request body.
 
-## 4. Sensitive assessment workflow
+## 4. Account password recovery
+
+- **CONFIRMED — Recovery method:** Password recovery is admin-assisted. A student contacts the teacher/admin, who verifies the student's identity through an appropriate in-person or otherwise pre-established trusted process before initiating recovery.
+- Recovery must use a secure, admin-only Firebase Authentication recovery flow. Do not ask an admin to view, choose, or store a student's permanent password; do not store passwords or reset secrets in Firestore, application logs or audit metadata.
+- Because email delivery is excluded from the current scope, the exact secure hand-off of a Firebase-generated password-reset action link/code must be designed and tested before implementation. Do not send it through an unapproved channel or expose it in logs.
+- Record the recovery action, initiating admin and timestamp in the audit log, without recording the reset link/code or password.
+
+## 5. Sensitive assessment workflow
 
 1. An assessment version is immutable once used by an attempt. Changes create a new version.
 2. Answer keys are stored separately from student-visible question content.
@@ -66,7 +73,7 @@ Deterministic IDs should use an unambiguous encoding or a stable hash of the com
 
 The attempt count, retake approval details and result-release workflow must be covered by automated tests before real use.
 
-## 5. Assignment workflow
+## 6. Assignment workflow
 
 - Physical task assignments record teacher review/completion; students do not upload files.
 - Online activity assignments may reference a short assessment (maximum 10 questions) and an adjustable passing threshold (proposed default 70%, subject to the approved specification).
@@ -74,7 +81,7 @@ The attempt count, retake approval details and result-release workflow must be c
 - Opening an external resource is not proof that it was read or watched.
 - Assignment records are per student, even when the assignment is distributed to a whole class.
 
-## 6. Attendance and dates
+## 7. Attendance and dates
 
 - Store the attendance date as a date-only value in the academy's approved timezone, not as a browser-local timestamp.
 - Store server-generated `createdAt`/`updatedAt` timestamps separately from the attendance date.
@@ -82,11 +89,11 @@ The attempt count, retake approval details and result-release workflow must be c
 - Attendance calculations must exclude non-attendance days.
 - The academy timezone remains an open decision; do not treat the example `Asia/Karachi` in `.env.example` as an approved final choice until confirmed.
 
-## 7. Audit and privacy
+## 8. Audit and privacy
 
 Audit critical account, class, attendance, assignment, assessment, result-release and settings changes. Logs must be append-only through application code and must not contain passwords, bearer tokens, private keys, full assessment answer payloads or unnecessary personal details. Record enough safe metadata to identify the actor, action, target and time. Define retention and backup procedures before production; do not configure automatic deletion.
 
-## 8. Indexes and query strategy
+## 9. Indexes and query strategy
 
 The current `firestore.indexes.json` is intentionally empty. Add composite indexes only when implemented API queries require them. Likely query patterns include:
 - active class access by `userUid + accessType + active`;
@@ -99,7 +106,7 @@ The current `firestore.indexes.json` is intentionally empty. Add composite index
 
 These are candidate query patterns, not a final index list. Validate each index against actual queries and Firestore emulator tests. Keep result sets bounded and paginate.
 
-## 9. API authorization checklist
+## 10. API authorization checklist
 
 Every endpoint must specify:
 - authentication required or public;
@@ -112,13 +119,13 @@ Every endpoint must specify:
 
 The current API contains only health and authenticated-session routes. This document does not imply that the collections, workflows or endpoint authorization have been implemented.
 
-## 10. Decisions still required before database setup
+## 11. Decisions still required before database setup
 
 The following must be confirmed or explicitly accepted as launch blockers:
 1. **CONFIRMED — Result visibility:** Students may see assessment marks only after a teacher/admin separately publishes/releases the result. Teacher approval alone is not sufficient. This decision was confirmed by the project owner on 8 November 2026.
 2. **CONFIRMED — Assignment completion:** Passing an online activity does not automatically change the assignment to complete; teacher/admin review and explicit approval are required.
 3. **CONFIRMED — Assessment retakes:** One initial attempt is allowed; every additional attempt requires explicit teacher/admin approval.
-4. Password recovery method compatible with the no-email/no-paid-service constraint.
+4. **CONFIRMED — Password recovery:** Admin-assisted recovery. The student contacts the teacher/admin, who verifies identity and initiates a secure admin-only recovery process. The no-email constraint means the safe reset-link/code hand-off still needs to be designed and tested before implementation.
 5. Academy timezone and date-handling convention.
 6. Academic session naming and promotion/archiving process.
 7. Student identifier and the minimum profile/contact fields to collect.
@@ -129,7 +136,7 @@ The following must be confirmed or explicitly accepted as launch blockers:
 
 Do not create a production Firebase project, enable student access, import real records or deploy this schema until the relevant decisions and provider constraints are reviewed.
 
-## 11. Implementation sequence after approval
+## 12. Implementation sequence after approval
 
 1. Confirm the open decisions and finalize this model.
 2. Add schema validation helpers and role/class authorization helpers.
