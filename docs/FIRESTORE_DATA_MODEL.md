@@ -132,12 +132,21 @@ The following must be confirmed or explicitly accepted as launch blockers:
 8. **CONFIRMED — Minimum student profile:** Full name, academy-generated Student ID, email address, grade/class association and active/inactive status only. Grade/class association is maintained through trusted class records/access. No guardian details, phone numbers, home addresses, identity numbers, photographs or other extra personal fields by default.
 8. **CONFIRMED — Backup approach:** Manual admin-initiated data export. The export format, scope, frequency, secure storage location and restore procedure must be defined and tested before production.
 9. **CONFIRMED — Retention policy:** Retain records indefinitely by default; archive inactive students and preserve historical attendance, assignments and results with access restricted to authorized staff. This remains subject to applicable privacy/legal requirements and approved deletion requests.
-10. Hosting provider, free-tier terms, eligibility and serverless runtime compatibility.
+10. **PROVISIONALLY SELECTED — Hosting provider:** Netlify Free, subject to account eligibility, current 300-credit usage model, supported Node.js runtime, deployed test, Firebase integration and realistic usage verification before production.
 11. Any required at-risk indicator thresholds; no opaque or automatic disciplinary decisions.
 
 Do not create a production Firebase project, enable student access, import real records or deploy this schema until the relevant decisions and provider constraints are reviewed.
 
-## 12. Implementation sequence after approval
+## 12. Hosting decision — provisional
+
+- **PROVISIONALLY SELECTED — Netlify Free:** The project owner selected Netlify Free as the preferred hosting option on 8 November 2026, subject to verification before any production deployment.
+- Netlify currently advertises its Free plan at $0 with a 300-credit monthly limit. Current credit documentation lists 15 credits per production deploy, 20 credits per GB of bandwidth, 10 credits per GB-hour of compute, and 2 credits per 10,000 web requests. Web requests include pages, assets and API/function requests. When the monthly limit is reached, sites are paused until the next billing cycle; the Free plan has hard limits and cannot incur overage charges. This means production deployments and normal traffic consume the same finite monthly allowance, so usage must be monitored.
+- Netlify's Functions documentation currently lists a 60-second synchronous execution limit, 1 GB default memory, 6 MB buffered request/response payload, and a Node.js runtime based on the build Node version when that version is a supported AWS Lambda runtime. Netlify announced Node.js 24 as the default for new sites created from 7 July 2026. The repository currently declares `node >=22`; the exact build/runtime version must be pinned and verified with a deployed test function before production.
+- The current repository configuration (`netlify.toml`) publishes `public`, builds functions from `netlify/functions`, and routes `/api/*` to the API function. This is structurally aligned with Netlify's static hosting plus Functions model, but deployment, Firebase Admin credentials, cold-start behavior, limits and end-to-end authentication have not been tested on Netlify.
+- **Before approval:** verify account/team eligibility and current dashboard terms; pin a supported Node runtime; deploy only a non-production test site; test the API and Firebase Admin initialization using a separate test Firebase project; measure realistic usage; confirm the site pauses safely at the free limit; and document a no-cost rollback/hosting alternative. Do not enable real student access or deploy production data until these checks pass.
+- Official references checked 8 November 2026: [Netlify pricing](https://www.netlify.com/pricing/), [How credits work](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/how-credits-work/), [Functions configuration and Node.js runtime](https://docs.netlify.com/build/functions/configuration/), [Node.js 24 default announcement](https://www.netlify.com/changelog/2026-07-07-nodejs-24-default-new-sites/).
+
+## 13. Implementation sequence after approval
 
 1. Confirm the open decisions and finalize this model.
 2. Add schema validation helpers and role/class authorization helpers.
