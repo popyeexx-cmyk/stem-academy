@@ -67,7 +67,7 @@ The emulator is a development/test tool. Passing emulator tests does not by itse
 
 ## 6. Separate live test-project compatibility check
 
-A separate Firebase test project will be needed only for checks that the emulator cannot prove, especially whether live Firebase Authentication accepts the reserved `.invalid` domain for email/password account creation and sign-in.
+A separate Firebase test project will be needed only for checks that the emulator cannot prove, especially whether live Firebase Authentication accepts the approved `stemacademy.edu.pk` domain for email/password account creation and sign-in.
 
 Before creating that project:
 - use a clearly named non-production project;
@@ -77,11 +77,11 @@ Before creating that project:
 - do not deploy the application or publish real user access;
 - never share service-account private keys or passwords in chat or GitHub.
 
-Test at least one synthetic alias such as `sa-2026-001@students.stemacademy.invalid` and a synthetic staff alias. Record the exact outcome. If Firebase rejects the domain, stop and return to design review; do not silently replace it with a deliverable address. Do not assume that the local emulator's acceptance proves live Firebase acceptance.
+Test at least one synthetic student alias such as `sa-2026-001@stemacademy.edu.pk` and a synthetic staff alias such as `sa-tch-001@stemacademy.edu.pk`. Record the exact outcome. If Firebase rejects the domain, stop and return to design review. Do not assume that domain registration or local emulator acceptance proves live Firebase acceptance. Do not assume that email delivery or mailbox services are configured.
 
 ## 7. Current blockers before real student data
 
-- Prove live Firebase `.invalid` alias compatibility with synthetic accounts.
+- Prove live Firebase `stemacademy.edu.pk` alias compatibility with synthetic accounts.
 - Implement and test server-side role/scope/ownership authorization.
 - Implement lockout and a practical no-cost rate-limiting strategy.
 - Implement transaction-safe permanent student and staff ID allocation.
