@@ -99,7 +99,7 @@ These are the remaining questions or technical proofs. They are not reasons to s
 | # | Blocker | Required resolution |
 |---|---|---|
 | 1 | Firebase alias compatibility | Test whether Firebase Authentication accepts the reserved `.invalid` domain for email/password account creation and sign-in using synthetic accounts in a separate test project. If rejected, pause for a revised design. |
-| 2 | Password recovery hand-off | Approve and test the secure no-email recovery mechanism. |
+| 2 | Password recovery hand-off | **POLICY APPROVED:** student resets are handled by the administrator in person using a temporary password and forced change at next sign-in. Administrator-account recovery requires owner/authority identity verification and a separately secured project-owner/technical-custodian procedure through the official Firebase project administration interface. Implement and rehearse both procedures with synthetic accounts; keep recovery secrets outside the LMS and out of logs. |
 | 3 | Session rollover implementation | Implement and test the approved manual administrator workflow, including confirmation summary, historical record preservation, audit events and safe retry/partial-failure handling. |
 | 4 | Student ID allocator | Implement and test transaction-safe, never-recycled ID issuance. |
 | 5 | Support-indicator rules | **POLICY APPROVED:** teachers configure attendance/assessment warning thresholds and review periods; suggested examples are below 75% attendance, below 40% assessment performance, and the current academic month. Minimum evidence: 5 recorded attendance days for attendance warnings and 2 graded assessments for assessment warnings within the selected period. Below minimums, show insufficient data. Flags are advisory only. **RESOLVED — Recalculation:** recalculate when relevant attendance or assessment records change, and when a teacher changes a threshold or review period. Use normal API operations only; no cron jobs, scheduled functions, polling or background workers. |
@@ -156,3 +156,8 @@ That older prompt must not silently override the later approved STEM Academy Mas
 ### Staff password policy
 
 **POLICY APPROVED:** Administrator and teacher passwords require at least 12 characters; no arbitrary periodic expiry. Only the administrator may reset a teacher password. Implement a secure verified handoff, force a change after temporary-password use, and never log passwords. The administrator's own recovery procedure remains a separate design item so the academy cannot be permanently locked out.
+
+
+### Administrator account recovery
+
+**POLICY APPROVED:** The academy owner/designated authority verifies the administrator's identity in person using a documented process independent of the locked account. An authorized Firebase project owner/technical custodian then restores administrator access through the official project administration interface. Provider/project-owner recovery credentials must be secured separately from the LMS, with an offline recovery record and restricted access. Do not send recovery secrets through ordinary email or messaging, and never store passwords, reset links, recovery codes or provider credentials in application data or logs. Record only the verifier, authorized operator, action and timestamp. The procedure must be rehearsed using synthetic accounts before production, and Firebase project ownership must not depend solely on the administrator's LMS account.
