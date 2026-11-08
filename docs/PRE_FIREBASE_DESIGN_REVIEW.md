@@ -177,3 +177,22 @@ That older prompt must not silently override the later approved STEM Academy Mas
 ### Staff ID format
 
 **POLICY APPROVED:** Use `SA-ADM-001` for the administrator and `SA-TCH-001`, `SA-TCH-002`, etc. for teachers. IDs are system-generated, academy-wide unique, permanent, immutable and never reused. Implement a transaction-safe server-side allocator and test concurrent issuance before real staff accounts are created. The Staff ID is the academy-facing login identifier, not the Firebase UID or internal authentication alias.
+
+
+### Newly approved operating policies — 8 November 2026
+
+The project owner approved all seven proposals in the consolidated policy review exactly as presented:
+
+1. **Assignment deadlines:** deadlines use `Asia/Karachi`; submissions are accepted through the exact deadline; late submissions are blocked by default; teachers may extend deadlines for an individual student or a class; server time is authoritative; all changes are audited.
+2. **Assessment timing:** teachers may set opening and closing times; students cannot start outside that window; time limits are enforced by the server; an attempt ends at the earlier of its time limit or assessment closing time; retakes still require teacher/admin approval.
+3. **Attendance corrections:** teachers correct attendance only within assigned classes; admins may correct any class; a reason is required; old and new values, actor and timestamp are preserved; students cannot edit attendance.
+4. **Communication:** in-app notices only; teachers publish to assigned classes and admins academy-wide; students can mark notices read; no email, SMS, WhatsApp, private chat, attachments or external notifications.
+5. **Technical submission problems:** teachers may extend/reopen work after a documented technical issue; preserve the original attempt/history; do not automatically alter marks or attendance.
+6. **Backup protection:** downloadable academic-record backup excludes credentials/secrets, is encrypted before download, uses an academy-controlled passphrase stored separately, is kept in an access-restricted academy-controlled location, and may be restored only by the admin. Test restoration with synthetic data. Confirm technical feasibility before relying on any free provider tier.
+7. **Zero-cost limits:** Firebase Spark and Netlify Free only; no automatic paid upgrade, billing account or paid API without explicit owner approval. Warn and safely stop/restrict affected operations at free-tier limits; do not promise unlimited availability or capacity.
+
+These are owner-approved policies, not proof of implementation. Encryption, restore, server timing, audit trails and provider limits remain technical verification tasks.
+
+### Policy closure and Firebase stage boundary
+
+The owner has now approved the consolidated remaining policy set. Proceed to **Firebase test-stage preparation** only: local emulator configuration, a separate non-production Firebase project, synthetic accounts and compatibility/security tests. Do not create or use production student accounts, import real student records, enable production access, add billing or deploy the production system. Keep Firestore browser rules deny-all while the server API is developed and tested.
