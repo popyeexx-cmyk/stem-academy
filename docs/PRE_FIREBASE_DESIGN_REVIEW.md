@@ -19,7 +19,7 @@ The following are confirmed and should be treated as requirements, not suggestio
 
 | Area | Confirmed rule |
 |---|---|
-| Result visibility | Marks remain hidden until a teacher/admin separately publishes/releases them. |
+| Staff accounts and permissions | Separate administrator and teacher accounts; teacher access is limited to assigned classes and subjects. |\n| Result visibility | Marks remain hidden until a teacher/admin separately publishes/releases them. |
 | Online assignment completion | Passing does not complete the assignment; teacher/admin approval is required. |
 | Assessment retakes | One initial attempt; every additional attempt requires teacher/admin approval. |
 | Password recovery | Admin-assisted; identity must be checked before recovery. |
@@ -57,7 +57,7 @@ Firebase Authentication should be the source of truth for the login email. If th
 
 ### 3.5 Admin/teacher role model
 
-The scope describes one teacher/admin while the application has separate `admin`, `teacher` and `student` roles. Define whether the single staff account is an admin who also receives teaching capabilities, or whether two separate staff accounts are expected. Do not solve this by trusting a role supplied by the browser. A clear server-side permission matrix is required.
+**RESOLVED — Separate staff accounts:** The owner confirmed two different staff accounts: one administrator and one teacher. The administrator has academy-wide user, class, settings and permission management. The teacher has teaching permissions only for explicitly assigned classes and subjects. The server must check both class access and subject-specific teaching assignments for teacher actions. Keep the roles separate; do not share credentials or grant teacher access to admin-only operations.
 
 ### 3.6 Password recovery without email delivery
 
@@ -95,16 +95,16 @@ These are the remaining questions or technical proofs. They are not reasons to s
 |---|---|---|
 | 1 | Staff role arrangement | Confirm whether the single staff account is admin-only with teaching permissions or whether separate admin and teacher accounts are required. |
 | 2 | Email verification | Decide whether student email must be verified before activation; define email-change synchronization. |
-| 3 | Password recovery hand-off | Approve and test the secure no-email recovery mechanism. |
-| 4 | Session rollover | Define promotion, repeaters, transfers, Grade 10 completion and archive steps. |
-| 5 | Student ID allocator | Implement and test transaction-safe, never-recycled ID issuance. |
-| 6 | Online activity pass mark | Approve the default passing threshold (70% is only a proposal) and clarify whether it can vary by activity. |
-| 7 | Support-indicator rules | Define assessment/attendance observation periods, minimum data requirements and how often teachers review flags. |
-| 8 | Backup/restore | Approve export format, included collections, frequency, secure storage, encryption/access controls and a tested restore procedure. |
-| 9 | Netlify runtime and free-tier proof | Pin exact Node.js version and complete a non-production deployment/usage test. |
-| 10 | Firebase test environment | Create a separate test project only after the preceding choices; use no real student data. |
-| 11 | Time/date behaviour | Define how due dates and scheduled assessments behave at day boundaries in `Asia/Karachi`, including late submissions and edits. |
-| 12 | API rate limiting | Choose a workable no-cost strategy and test abuse/limit behaviour. |
+| 2 | Password recovery hand-off | Approve and test the secure no-email recovery mechanism. |
+| 3 | Session rollover | Define promotion, repeaters, transfers, Grade 10 completion and archive steps. |
+| 4 | Student ID allocator | Implement and test transaction-safe, never-recycled ID issuance. |
+| 5 | Online activity pass mark | Approve the default passing threshold (70% is only a proposal) and clarify whether it can vary by activity. |
+| 6 | Support-indicator rules | Define assessment/attendance observation periods, minimum data requirements and how often teachers review flags. |
+| 7 | Backup/restore | Approve export format, included collections, frequency, secure storage, encryption/access controls and a tested restore procedure. |
+| 8 | Netlify runtime and free-tier proof | Pin exact Node.js version and complete a non-production deployment/usage test. |
+| 9 | Firebase test environment | Create a separate test project only after the preceding choices; use no real student data. |
+| 10 | Time/date behaviour | Define how due dates and scheduled assessments behave at day boundaries in `Asia/Karachi`, including late submissions and edits. |
+| 11 | API rate limiting | Choose a workable no-cost strategy and test abuse/limit behaviour. |
 
 ## 5. Scope conflicts to keep out of the current build
 
@@ -131,7 +131,7 @@ That older prompt must not silently override the later approved STEM Academy Mas
 
 ## 7. Recommended next sequence
 
-1. Confirm the remaining owner choices in Section 4, starting with the staff role arrangement.
+1. Close the remaining owner choices in Section 4, then finalize the server-side admin/teacher/subject permission matrix.
 2. Finalize the password recovery and session rollover workflows.
 3. Specify the API permission matrix and server-side validation rules.
 4. Implement schema/ID allocation helpers with unit tests.
