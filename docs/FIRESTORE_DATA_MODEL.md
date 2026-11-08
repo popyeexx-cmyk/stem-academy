@@ -24,7 +24,8 @@
 |---|---|---|
 | `users` | Firebase Auth UID | `role`, `active`, `displayName` (student full name), `email`, `studentId` (academy-generated for students), `createdAt`, `updatedAt`; avoid collecting extra profile fields unless a documented need is approved |
 | `classes` | Stable class ID | `name`, `grade`, `academicSessionId`, `active`, timestamps |
-| `classAccess` | Deterministic class/user ID | `classId`, `userUid`, `accessType` (teacher or student), `active`, timestamps; teacher access establishes class-level scope only |\n| `teachingAssignments` | Deterministic teacher/class/subject ID | `teacherUid`, `classId`, `subjectId`, `active`, `assignedBy`, timestamps; identifies exactly which subjects a teacher may manage in a class |
+| `classAccess` | Deterministic class/user ID | `classId`, `userUid`, `accessType` (teacher or student), `active`, timestamps; teacher access establishes class-level scope only |
+| `teachingAssignments` | Deterministic teacher/class/subject ID | `teacherUid`, `classId`, `subjectId`, `active`, `assignedBy`, timestamps; identifies exactly which subjects a teacher may manage in a class |
 | `academicSessions` | Stable session ID | `name`, `startsOn`, `endsOn`, `active` |
 | `subjects` | Stable subject ID | `name`, `board`, `grade`, `active`, display order |
 | `topics` | Stable topic ID | `subjectId`, `chapterName`, `name`, `order`, `active` |
@@ -96,7 +97,8 @@ Audit critical account, class, attendance, assignment, assessment, result-releas
 ## 9. Indexes and query strategy
 
 The current `firestore.indexes.json` is intentionally empty. Add composite indexes only when implemented API queries require them. Likely query patterns include:
-- active class access by `userUid + accessType + active`;\n- teacher teaching assignments by `teacherUid + classId + subjectId + active`;
+- active class access by `userUid + accessType + active`;
+- teacher teaching assignments by `teacherUid + classId + subjectId + active`;
 - class assignments by `classId + publicationState + dueDate`;
 - student assignment records by `studentUid + status + updatedAt`;
 - attendance by `classId + attendanceDate` and by `studentUid + attendanceDate`;
@@ -122,7 +124,8 @@ The current API contains only health and authenticated-session routes. This docu
 ## 11. Decisions still required before database setup
 
 The following must be confirmed or explicitly accepted as launch blockers:
-1. **CONFIRMED — Staff accounts and subject permissions:** Use separate administrator and teacher accounts for two different staff members. The admin has academy-wide administration permissions; each teacher is limited to explicitly assigned classes and subjects.\n2. **CONFIRMED — Result visibility:** Students may see assessment marks only after a teacher/admin separately publishes/releases the result. Teacher approval alone is not sufficient. This decision was confirmed by the project owner on 8 November 2026.
+1. **CONFIRMED — Staff accounts and subject permissions:** Use separate administrator and teacher accounts for two different staff members. The admin has academy-wide administration permissions; each teacher is limited to explicitly assigned classes and subjects.
+2. **CONFIRMED — Result visibility:** Students may see assessment marks only after a teacher/admin separately publishes/releases the result. Teacher approval alone is not sufficient. This decision was confirmed by the project owner on 8 November 2026.
 2. **CONFIRMED — Assignment completion:** Passing an online activity does not automatically change the assignment to complete; teacher/admin review and explicit approval are required.
 3. **CONFIRMED — Assessment retakes:** One initial attempt is allowed; every additional attempt requires explicit teacher/admin approval.
 4. **CONFIRMED — Password recovery:** Admin-assisted recovery. The student contacts the teacher/admin, who verifies identity and initiates a secure admin-only recovery process. The no-email constraint means the safe reset-link/code hand-off still needs to be designed and tested before implementation.
