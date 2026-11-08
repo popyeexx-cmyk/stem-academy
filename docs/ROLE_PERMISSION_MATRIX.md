@@ -127,3 +127,13 @@ At minimum, automated tests must prove that:
 ## 8. Implementation status
 
 This document defines the recommended permission baseline; it does not mean these permissions are already implemented. The current frontend remains a demonstration, and the backend does not yet implement the full set of application workflows. Implement and test the server-side authorization before connecting real student accounts or records.
+
+
+## 9. Staff account identity and provisioning
+
+- Every staff member has a separate account and a unique academy-issued Staff ID. The administrator and teacher sign in using Staff ID and password; staff do not share accounts or credentials.
+- There is no staff self-registration.
+- The academy owner/designated authority provisions the first administrator account. The administrator creates, assigns the teacher role to, and activates teacher accounts.
+- A staff account may use a deterministic internal Firebase Authentication email alias derived from its Staff ID, only after compatibility is proven with synthetic accounts in the separate test Firebase project. The alias is an authentication identifier, not a contact address; no email verification or email delivery is required. If Firebase rejects the reserved non-deliverable domain, pause for design review rather than substituting a deliverable domain.
+- Staff IDs must be unique, immutable after issuance and contain no sensitive personal information.
+- Only the administrator may reset a teacher's password using the approved verified process. Administrator recovery follows the owner-verified procedure in the design review.
