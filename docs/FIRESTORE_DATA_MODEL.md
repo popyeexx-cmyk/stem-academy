@@ -223,3 +223,57 @@ Do not create a production Firebase project, enable student access, import real 
 ## Staff ID format
 
 **CONFIRMED — Staff ID format:** The administrator receives a system-generated ID in the format `SA-ADM-001`. Teachers receive system-generated IDs in the format `SA-TCH-001`, `SA-TCH-002`, and so on. Staff IDs are unique across the academy, permanent, immutable after issuance and never reused. The server must allocate IDs safely under concurrent account creation; clients must never choose or edit an ID. Keep the staff ID separate from the Firebase Auth UID and internal authentication alias. This is the approved format; implementation and collision/concurrency tests remain required.
+
+
+## 13. Newly approved operating policies
+
+**POLICY APPROVED — 8 November 2026.** The project owner approved all seven remaining policy proposals exactly as presented.
+
+### 13.1 Assignment deadlines
+- Teachers set assignment deadlines in the academy timezone, `Asia/Karachi`.
+- Students may submit up to and including the stated deadline. The server clock, not the student's device clock, determines whether a submission is on time.
+- Late submissions are blocked by default.
+- A teacher may extend a deadline for an individual student or the whole class.
+- Every deadline change is recorded in the audit log.
+
+### 13.2 Assessment opening, closing and duration
+- Teachers may set an opening date/time and a closing date/time in `Asia/Karachi`.
+- Students cannot start before opening or after closing.
+- If an assessment has a time limit, the server enforces it.
+- An attempt ends at whichever comes first: the student's time limit or the assessment closing time.
+- Every additional attempt remains subject to the approved teacher/admin approval policy.
+
+### 13.3 Attendance corrections
+- Teachers may mark and correct attendance for their assigned classes; administrators may do so for any class.
+- A correction requires a reason.
+- Preserve the previous value, corrected value, actor and timestamp in the correction history/audit trail.
+- Students cannot edit attendance.
+
+### 13.4 Communication and notices
+- Communication is through notices inside the LMS only.
+- Teachers may publish notices to their assigned classes; administrators may publish academy-wide notices.
+- Students may read notices and mark them as read.
+- Excluded: email, SMS, WhatsApp integration, private chat, file attachments and external notification services.
+
+### 13.5 Exceptional technical problems
+- If the LMS or internet connection prevents a student from submitting work, the teacher may grant an extension or reopen the activity.
+- The teacher records the reason.
+- Preserve the original attempt and its history.
+- A technical problem must not automatically change marks or attendance.
+
+### 13.6 Backup protection
+- The system generates a downloadable backup of academic records and excludes passwords, tokens, authentication credentials and private keys.
+- Encrypt the backup before download. The academy controls the encryption passphrase and stores it separately from the backup.
+- Store backups in an academy-controlled, access-restricted location.
+- Only the administrator may initiate restoration.
+- Test restoration using synthetic records before introducing real student data.
+- This policy does not assume that a provider-managed backup/export feature is available on a free plan; the technical implementation must be verified.
+
+### 13.7 Zero-cost service limits
+- Use Firebase Spark and Netlify Free only.
+- Never automatically upgrade to a paid plan.
+- Do not add a billing account or paid API without the project owner's explicit approval.
+- If a free-tier limit is reached, warn the administrator and safely stop or restrict affected operations rather than silently losing records.
+- Do not promise unlimited availability, capacity or storage.
+
+These policies are approved for implementation planning. They do not mean the corresponding features have already been implemented or tested.
