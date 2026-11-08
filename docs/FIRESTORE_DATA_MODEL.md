@@ -2,7 +2,7 @@
 
 **Status:** Design proposal only — not deployed and not yet approved for production  
 **Baseline:** STEM Academy Master Specification v1.1.0  
-**Scope:** AJK Board Physics LMS, one academy, one teacher/administrator, fewer than 50 students, Grades 9 and 10  
+**Scope:** AJK Board Physics LMS, one academy, separate administrator and teacher accounts (two staff accounts initially), fewer than 50 students, Grades 9 and 10  
 **Architecture:** Firebase Authentication + Cloud Firestore Spark + trusted Node.js serverless API using Firebase Admin SDK
 
 ## 1. Non-negotiable design rules
@@ -11,7 +11,7 @@
 2. Every API route independently authenticates and authorizes the caller. Firebase Admin SDK bypasses Firestore Rules.
 3. The Firebase Auth UID is the account identity. The trusted `users/{uid}` document determines the role and active status; client-provided roles are never trusted.
 4. Class access comes from trusted class-access records, not from a class ID supplied by the browser.
-5. Students may retrieve only their own records and released results. Teachers may retrieve records only for classes assigned to them. Admin-only operations require the admin role.
+5. Students may retrieve only their own records and released results. Teachers may retrieve records only for classes and subjects explicitly assigned to them. Admin-only operations require the admin role.
 6. Assessment answer keys and unpublished scores must never be returned by student-facing API responses.
 7. Keep records small and queryable. Use stable document IDs, server timestamps, bounded queries and cursor pagination.
 8. No file uploads, Firebase Storage, Cloud Functions, background jobs, scheduled tasks, realtime listeners or paid services are introduced by this proposal.
@@ -24,7 +24,7 @@
 |---|---|---|
 | `users` | Firebase Auth UID | `role`, `active`, `displayName` (student full name), `email`, `studentId` (academy-generated for students), `createdAt`, `updatedAt`; avoid collecting extra profile fields unless a documented need is approved |
 | `classes` | Stable class ID | `name`, `grade`, `academicSessionId`, `active`, timestamps |
-| `classAccess` | Deterministic class/user ID | `classId`, `userUid`, `accessType` (teacher or student), `active`, timestamps |
+| `classAccess` | Deterministic class/user ID | `classId`, `userUid`, `accessType` (teacher or student), `active`, timestamps; teacher access establishes class-level scope only |\n| `teachingAssignments` | Deterministic teacher/class/subject ID | `teacherUid`, `classId`, `subjectId`, `active`, `assignedBy`, timestamps; identifies exactly which subjects a teacher may manage in a class |
 | `academicSessions` | Stable session ID | `name`, `startsOn`, `endsOn`, `active` |
 | `subjects` | Stable subject ID | `name`, `board`, `grade`, `active`, display order |
 | `topics` | Stable topic ID | `subjectId`, `chapterName`, `name`, `order`, `active` |
@@ -47,7 +47,7 @@ Deterministic IDs should use an unambiguous encoding or a stable hash of the com
 
 - Firebase Authentication proves who signed in; it does not determine their application role.
 - On each protected request, verify the Firebase ID token (including revocation where supported), load `users/{uid}`, and reject missing, inactive or invalid-role accounts.
-- For a teacher request scoped to a class, verify an active `classAccess` record with `accessType: "teacher"` for that UID and class.
+- For a teacher request scoped to a class, verify an active `classAccess` record with `accessType: "teacher"` for that UID and class. For subject-specific teaching or editing, also verify an active `teachingAssignments` record matching the teacher UID, class ID and subject ID.
 - For a student request, verify an active `classAccess` record with `accessType: "student"`; then constrain all student data reads to the authenticated UID.
 - Never accept `role`, `studentUid`, `teacherUid`, approval identity or audit actor identity as authoritative from request bodies. Derive them from the verified session.
 - Only an admin may create/deactivate users, assign roles, create classes or change class access. The last active admin must not be deactivated or demoted.
@@ -96,7 +96,7 @@ Audit critical account, class, attendance, assignment, assessment, result-releas
 ## 9. Indexes and query strategy
 
 The current `firestore.indexes.json` is intentionally empty. Add composite indexes only when implemented API queries require them. Likely query patterns include:
-- active class access by `userUid + accessType + active`;
+- active class access by `userUid + accessType + active`;\n- teacher teaching assignments by `teacherUid + classId + subjectId + active`;
 - class assignments by `classId + publicationState + dueDate`;
 - student assignment records by `studentUid + status + updatedAt`;
 - attendance by `classId + attendanceDate` and by `studentUid + attendanceDate`;
@@ -122,7 +122,7 @@ The current API contains only health and authenticated-session routes. This docu
 ## 11. Decisions still required before database setup
 
 The following must be confirmed or explicitly accepted as launch blockers:
-1. **CONFIRMED — Result visibility:** Students may see assessment marks only after a teacher/admin separately publishes/releases the result. Teacher approval alone is not sufficient. This decision was confirmed by the project owner on 8 November 2026.
+1. **CONFIRMED — Staff accounts and subject permissions:** Use separate administrator and teacher accounts for two different staff members. The admin has academy-wide administration permissions; each teacher is limited to explicitly assigned classes and subjects.\n2. **CONFIRMED — Result visibility:** Students may see assessment marks only after a teacher/admin separately publishes/releases the result. Teacher approval alone is not sufficient. This decision was confirmed by the project owner on 8 November 2026.
 2. **CONFIRMED — Assignment completion:** Passing an online activity does not automatically change the assignment to complete; teacher/admin review and explicit approval are required.
 3. **CONFIRMED — Assessment retakes:** One initial attempt is allowed; every additional attempt requires explicit teacher/admin approval.
 4. **CONFIRMED — Password recovery:** Admin-assisted recovery. The student contacts the teacher/admin, who verifies identity and initiates a secure admin-only recovery process. The no-email constraint means the safe reset-link/code hand-off still needs to be designed and tested before implementation.
