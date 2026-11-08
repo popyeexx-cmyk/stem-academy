@@ -166,8 +166,8 @@ Do not create a production Firebase project, enable student access, import real 
 
 ## 14. Student performance indicators
 
-- **CONFIRMED — Teacher-defined thresholds:** Authorized teachers define attendance and assessment thresholds. The system may flag students for teacher review when those thresholds are met.
-- A flag is an advisory support signal, not a diagnosis, grade, disciplinary finding or automatic decision. A teacher must review the underlying records and decide whether any supportive action is appropriate.
+- **CONFIRMED — Teacher-defined support indicators:** Authorized teachers define attendance and assessment warning thresholds. The initial recommended examples are attendance below 75% and assessment performance below 40%; these are configurable examples, not universal defaults. Teachers may set the review period, with the current academic month as the recommended starting period. The system may flag students for teacher review when the configured thresholds are met.
+- A flag is an advisory support signal, not a diagnosis, grade, disciplinary finding or automatic decision. The flag should show the selected observation period and the underlying attendance/assessment values. A teacher must review the underlying records and decide whether any supportive action is appropriate.
 - Do not automatically penalize students, change marks, restrict access, notify guardians or label students as failing/risk categories solely because a threshold was crossed.
 - Store the threshold settings, who changed them and when. Show the underlying attendance/assessment period and values alongside each flag so staff can interpret it fairly.
 
