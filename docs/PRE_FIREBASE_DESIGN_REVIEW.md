@@ -25,9 +25,9 @@ The following are confirmed and should be treated as requirements, not suggestio
 | Assessment retakes | One initial attempt; every additional attempt requires teacher/admin approval. |
 | Password recovery | Admin-assisted; identity must be checked before recovery. |
 | Timezone | `Asia/Karachi` (UTC+05:00). |
-| Academic sessions | Annual sessions named by calendar year, with separate Grade 9 and Grade 10 classes. |
+| Academic sessions and rollover | Annual sessions named by calendar year, with separate Grade 9 and Grade 10 classes. The administrator manually confirms promotion, repetition, Grade 10 completion/archive or transfer/inactive status; no automatic rollover. Permanent SIDs and historical records are preserved. |
 | Student ID | Permanent server-generated `SA-YYYY-NNN`; year is first enrollment/ID-issuance year. |
-| Student profile | Full name, academy ID, email, grade/class association and active/inactive status only. |
+| Student profile and login | Full name, permanent SID, internal Firebase alias, grade/class association and active/inactive status only. A real contact email is not required. Students sign in with SID and password. |
 | Backups | Manual admin-initiated export; secure storage and tested restoration required. |
 | Retention | Retain records indefinitely by default; archive inactive students and preserve history, subject to applicable privacy/legal requirements. |
 | Hosting | Netlify Free is provisionally selected, not yet approved for production. |
