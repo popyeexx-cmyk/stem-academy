@@ -146,3 +146,8 @@ That older prompt must not silently override the later approved STEM Academy Mas
 10. Only after these checks, consider a production launch review.
 
 **Final conclusion:** The project has a solid set of owner-approved policies and a useful proposed data model. The next milestone should be design closure and test-environment preparation—not production Firebase setup or student onboarding.
+
+
+### Login protection
+
+**POLICY APPROVED:** Lock a student account for 15 minutes after 5 consecutive failed sign-in attempts. An administrator may unlock it earlier after in-person identity verification. Enforce attempt counting and lockout on the server, avoid account-enumeration clues in login errors, protect secrets from logs, and test lockout, expiry and admin-unlock behaviour. Rate limiting is also required to mitigate automated guessing.
