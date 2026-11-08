@@ -218,3 +218,8 @@ Do not create a production Firebase project, enable student access, import real 
 ## Staff login protection
 
 **CONFIRMED — Staff login protection:** Apply the same threshold to administrator and teacher accounts: after 5 consecutive failed sign-in attempts, temporarily lock the account for 15 minutes. The academy owner/designated authority may restore a locked administrator account after independent identity verification. Only the administrator may unlock a teacher account after verifying the teacher's identity. Enforce attempt counting, lockout and unlock authorization on the trusted server; do not rely on browser counters or reveal account existence in login errors. Apply additional rate limiting against automated guessing and test lockout, expiry, administrator unlock and owner-authorized administrator recovery with synthetic accounts. Record security events without logging passwords or recovery secrets.
+
+
+## Staff ID format
+
+**CONFIRMED — Staff ID format:** The administrator receives a system-generated ID in the format `SA-ADM-001`. Teachers receive system-generated IDs in the format `SA-TCH-001`, `SA-TCH-002`, and so on. Staff IDs are unique across the academy, permanent, immutable after issuance and never reused. The server must allocate IDs safely under concurrent account creation; clients must never choose or edit an ID. Keep the staff ID separate from the Firebase Auth UID and internal authentication alias. This is the approved format; implementation and collision/concurrency tests remain required.
