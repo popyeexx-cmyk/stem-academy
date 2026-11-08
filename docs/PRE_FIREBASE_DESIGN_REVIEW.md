@@ -172,3 +172,8 @@ That older prompt must not silently override the later approved STEM Academy Mas
 ### Staff login protection
 
 **POLICY APPROVED:** Both administrator and teacher accounts are temporarily locked for 15 minutes after 5 consecutive failed sign-in attempts. The academy owner/designated authority may restore a locked administrator account after independent identity verification. Only the administrator may unlock a teacher account after identity verification. Enforce these controls server-side, avoid account-enumeration clues, add rate limiting against automated guessing, and test lockout/expiry/recovery using synthetic accounts. Never log passwords or recovery secrets.
+
+
+### Staff ID format
+
+**POLICY APPROVED:** Use `SA-ADM-001` for the administrator and `SA-TCH-001`, `SA-TCH-002`, etc. for teachers. IDs are system-generated, academy-wide unique, permanent, immutable and never reused. Implement a transaction-safe server-side allocator and test concurrent issuance before real staff accounts are created. The Staff ID is the academy-facing login identifier, not the Firebase UID or internal authentication alias.
