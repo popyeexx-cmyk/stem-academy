@@ -142,7 +142,7 @@ The following must be confirmed or explicitly accepted as launch blockers:
 4. **CONFIRMED — Assessment retakes:** One initial attempt is allowed; every additional attempt requires explicit teacher/admin approval.
 5. **CONFIRMED — Password recovery:** Admin-assisted recovery. The student contacts the teacher/admin, who verifies identity and initiates a secure admin-only recovery process. The no-email constraint means the safe reset-link/code hand-off still needs to be designed and tested before implementation.
 6. **CONFIRMED — Academy timezone:** Pakistan Standard Time (`Asia/Karachi`, UTC+05:00). Calendar dates and scheduled times use this academy timezone; store absolute timestamps consistently using UTC/server timestamps.
-7. **CONFIRMED — Academic sessions:** Annual sessions named by calendar year (for example, `2026`, `2027`), with separate Grade 9 and Grade 10 classes in each session. The student promotion and archival process still needs to be defined.
+7. **CONFIRMED — Academic sessions and rollover:** Annual sessions are named by calendar year (for example, `2026`, `2027`), with separate Grade 9 and Grade 10 classes in each session. At the start of a new session, the administrator manually reviews and confirms each student's placement: Grade 9 students who pass move to Grade 10; Grade 9 students who repeat remain in Grade 9; Grade 10 students who complete the year are archived; transferred students are marked inactive. No automatic promotion or archival is permitted. The permanent Student ID never changes. Historical class membership, attendance, assignments and results remain preserved.
 8. **CONFIRMED — Student identifier:** Generate a permanent academy ID in the format `SA-YYYY-NNN` (for example, `SA-2026-001`) on the trusted server, where `YYYY` is the student's first enrollment/ID-issuance year. IDs must be unique academy-wide, non-editable by students and must not be based on national identity numbers.
 9. **CONFIRMED — Minimum student profile:** Full name, academy-generated Student ID, internal Firebase authentication alias, grade/class association and active/inactive status only. A real contact email is not required. If later approved, an optional contact email is stored separately and is not used for login or recovery by default. Grade/class association is maintained through trusted class records/access. No guardian details, phone numbers, home addresses, identity numbers, photographs or other extra personal fields by default.
 10. **CONFIRMED — Student login:** Students sign in using their SID and password. The administrator creates and activates accounts after in-person identity verification. The frontend maps the SID to a deterministic internal Firebase alias such as `sa-2026-001@students.stemacademy.invalid`; no email verification or email delivery is required. Firebase acceptance of `.invalid` must be proven with synthetic accounts in a separate test project before implementation. If rejected, pause for design review.
@@ -170,7 +170,17 @@ Do not create a production Firebase project, enable student access, import real 
 - Do not automatically penalize students, change marks, restrict access, notify guardians or label students as failing/risk categories solely because a threshold was crossed.
 - Store the threshold settings, who changed them and when. Show the underlying attendance/assessment period and values alongside each flag so staff can interpret it fairly.
 
-## 15. Implementation sequence after approval
+## 15. Academic-session rollover procedure
+
+1. The administrator creates the next calendar-year academic session and its Grade 9 and Grade 10 classes.
+2. The administrator reviews each current student's year-end outcome and selects the next placement: Grade 9 to Grade 10 (pass), Grade 9 repeat, Grade 10 completion/archive, or transfer/inactive.
+3. The system must show a review/confirmation summary before applying any changes. The administrator confirms the batch explicitly; no placement is applied automatically based only on marks or attendance.
+4. Promotion/repetition creates the student's new active class association for the new session. It must not overwrite or delete the previous session's class membership or records.
+5. Grade 10 completion archives the student's active academy status while preserving all historical records. A transferred student is marked inactive and likewise retains historical records.
+6. The permanent academy SID remains unchanged for promotion, repetition, transfer and archival. An archived or inactive SID is never recycled.
+7. The operation must be auditable, idempotent or safely resumable, and tested for partial failures before production use.
+
+## 16. Implementation sequence after approval
 
 1. Confirm the open decisions and finalize this model.
 2. Add schema validation helpers and role/class authorization helpers.
