@@ -102,13 +102,12 @@ These are the remaining questions or technical proofs. They are not reasons to s
 | 2 | Password recovery hand-off | Approve and test the secure no-email recovery mechanism. |
 | 3 | Session rollover implementation | Implement and test the approved manual administrator workflow, including confirmation summary, historical record preservation, audit events and safe retry/partial-failure handling. |
 | 4 | Student ID allocator | Implement and test transaction-safe, never-recycled ID issuance. |
-| 5 | Online activity pass mark | **RESOLVED:** default 70%; teacher may adjust it for each individual activity. Store the effective threshold with the activity/version and test that it is applied consistently. |
-| 6 | Support-indicator rules | Define assessment/attendance observation periods, minimum data requirements and how often teachers review flags. |
-| 7 | Backup/restore | Approve export format, included collections, frequency, secure storage, encryption/access controls and a tested restore procedure. |
-| 8 | Netlify runtime and free-tier proof | Pin exact Node.js version and complete a non-production deployment/usage test. |
-| 9 | Firebase test environment | Create a separate test project only after the preceding choices; use no real student data. |
-| 10 | Time/date behaviour | Define how due dates and scheduled assessments behave at day boundaries in `Asia/Karachi`, including late submissions and edits. |
-| 11 | API rate limiting | Choose a workable no-cost strategy and test abuse/limit behaviour. |
+| 5 | Support-indicator rules | Define assessment/attendance observation periods, minimum data requirements and how often teachers review flags. |
+| 6 | Backup/restore | Approve export format, included collections, frequency, secure storage, encryption/access controls and a tested restore procedure. |
+| 7 | Netlify runtime and free-tier proof | Pin exact Node.js version and complete a non-production deployment/usage test. |
+| 8 | Firebase test environment | Create a separate test project only after the preceding choices; use no real student data. |
+| 9 | Time/date behaviour | Define how due dates and scheduled assessments behave at day boundaries in `Asia/Karachi`, including late submissions and edits. |
+| 10 | API rate limiting | Choose a workable no-cost strategy and test abuse/limit behaviour. |
 
 ## 5. Scope conflicts to keep out of the current build
 
