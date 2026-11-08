@@ -167,3 +167,8 @@ That older prompt must not silently override the later approved STEM Academy Mas
 ### Staff login and account provisioning
 
 **POLICY APPROVED:** Each administrator/teacher has a separate account and unique academy-issued Staff ID; staff sign in using Staff ID and password. No shared accounts or self-registration. The academy owner/designated authority provisions the first administrator; the administrator creates and activates teacher accounts. Staff may use deterministic internal Firebase aliases derived from Staff IDs, but compatibility with the reserved non-deliverable domain must be tested using synthetic accounts in the separate test project. The alias is not a contact address and must not receive email. If Firebase rejects the domain, pause for design review. Staff IDs are unique and immutable. Teacher password resets remain administrator-only; administrator recovery follows the owner-verified process above.
+
+
+### Staff login protection
+
+**POLICY APPROVED:** Both administrator and teacher accounts are temporarily locked for 15 minutes after 5 consecutive failed sign-in attempts. The academy owner/designated authority may restore a locked administrator account after independent identity verification. Only the administrator may unlock a teacher account after identity verification. Enforce these controls server-side, avoid account-enumeration clues, add rate limiting against automated guessing, and test lockout/expiry/recovery using synthetic accounts. Never log passwords or recovery secrets.
