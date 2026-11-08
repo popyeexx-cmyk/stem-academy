@@ -137,3 +137,13 @@ This document defines the recommended permission baseline; it does not mean thes
 - A staff account may use a deterministic internal Firebase Authentication email alias derived from its Staff ID, only after compatibility is proven with synthetic accounts in the separate test Firebase project. The alias is an authentication identifier, not a contact address; no email verification or email delivery is required. If Firebase rejects the reserved non-deliverable domain, pause for design review rather than substituting a deliverable domain.
 - Staff IDs must be unique, immutable after issuance and contain no sensitive personal information.
 - Only the administrator may reset a teacher's password using the approved verified process. Administrator recovery follows the owner-verified procedure in the design review.
+
+
+## 10. Approved Staff ID format
+
+- Administrator: system-generated `SA-ADM-001`.
+- Teachers: system-generated sequential IDs such as `SA-TCH-001`, `SA-TCH-002`, and so on.
+- IDs are unique across the academy, permanent, immutable after issuance and never reused.
+- The server generates and allocates IDs; staff and administrators cannot choose, edit or recycle them.
+- Staff sign in using their Staff ID and password. The Staff ID remains distinct from the Firebase Auth UID and internal Firebase authentication alias.
+- Implement a transaction-safe allocator and test concurrent issuance before creating real staff accounts.
