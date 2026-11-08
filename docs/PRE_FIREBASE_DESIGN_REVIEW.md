@@ -52,9 +52,11 @@ The 70% default remains unconfirmed and must not be hard-coded until approved.
 
 The ID must be allocated only by trusted server code using a Firestore transaction or another concurrency-safe allocator. A simple read-then-increment operation is unsafe if two students are registered simultaneously. Enforce a unique academy-wide ID and never recycle an issued ID.
 
-### 3.4 Email and identity source
+### 3.4 Student SID login and internal Firebase alias
 
-Firebase Authentication should be the source of truth for the login email. If the email is also copied into `users/{uid}`, define how email changes are synchronized and how duplicate email addresses are rejected. The owner has asked to include email, but whether it must be verified before account activation still needs a decision.
+**RESOLVED — SID login without real email verification:** The owner approved student sign-in using the permanent academy-generated SID and password. The administrator creates the account and verifies identity in person. To satisfy Firebase Authentication's email/password identity model without requiring a student's real email, the design uses a deterministic internal alias derived from SID, e.g. `sa-2026-001@students.stemacademy.invalid`. The alias contains no student name, is not a contact address, and must never receive email. Student email verification is not required. A real contact email is not required; if collected later, it must be optional and stored separately from the authentication alias.
+
+**Technical proof still required:** Test account creation and sign-in with the reserved `.invalid` domain in a separate Firebase test project using synthetic accounts. If Firebase rejects this domain, pause and return to design review rather than silently substituting a deliverable domain. The student login screen accepts SID and password and deterministically converts SID to the alias before Firebase Authentication sign-in. Passwords are sent only through Firebase's supported secure authentication flow and are never stored or logged.
 
 ### 3.5 Admin/teacher role model
 
@@ -94,7 +96,7 @@ These are the remaining questions or technical proofs. They are not reasons to s
 
 | # | Blocker | Required resolution |
 |---|---|---|
-| 1 | Email verification | Decide whether student email must be verified before activation; define email-change synchronization. |
+| 1 | Firebase alias compatibility | Test whether Firebase Authentication accepts the reserved `.invalid` domain for email/password account creation and sign-in using synthetic accounts in a separate test project. If rejected, pause for a revised design. |
 | 2 | Password recovery hand-off | Approve and test the secure no-email recovery mechanism. |
 | 3 | Session rollover | Define promotion, repeaters, transfers, Grade 10 completion and archive steps. |
 | 4 | Student ID allocator | Implement and test transaction-safe, never-recycled ID issuance. |
@@ -131,7 +133,7 @@ That older prompt must not silently override the later approved STEM Academy Mas
 
 ## 7. Recommended next sequence
 
-1. Close the remaining owner choices in Section 4 and implement the approved baseline in `docs/ROLE_PERMISSION_MATRIX.md`.
+1. Close the remaining owner choices in Section 4, prove Firebase `.invalid` alias compatibility in a test project, and implement the approved baseline in `docs/ROLE_PERMISSION_MATRIX.md`.
 2. Finalize the password recovery and session rollover workflows.
 3. Specify the API permission matrix and server-side validation rules.
 4. Implement schema/ID allocation helpers with unit tests.
