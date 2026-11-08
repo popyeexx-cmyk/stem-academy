@@ -59,7 +59,7 @@ Deterministic IDs should use an unambiguous encoding or a stable hash of the com
 2. Answer keys are stored separately from student-visible question content.
 3. The API returns only the version fields needed by the student. It never serializes answer-key documents into student responses.
 4. A student can submit only an attempt belonging to their own UID and an assessment assigned to their active class.
-5. A student receives one initial attempt. A second attempt requires an explicit teacher/admin approval record. The approval actor and timestamp are stored.
+5. **CONFIRMED — Retake policy:** A student receives one initial attempt. Every additional attempt requires explicit teacher/admin approval before it is available. Store the approval actor and timestamp for each approved retake.
 6. Teacher/admin approval of a calculated result and publication to students are separate actions. Approval alone does not make marks visible.
 7. Results remain hidden until an authorized teacher/admin performs the separate publish/release action. Student result endpoints return only the authenticated student's published results.
 8. Never trust a score, pass/fail flag, approval state or answer key sent by the browser; calculate and approve on the server.
@@ -117,7 +117,7 @@ The current API contains only health and authenticated-session routes. This docu
 The following must be confirmed or explicitly accepted as launch blockers:
 1. **CONFIRMED — Result visibility:** Students may see assessment marks only after a teacher/admin separately publishes/releases the result. Teacher approval alone is not sufficient. This decision was confirmed by the project owner on 8 November 2026.
 2. **CONFIRMED — Assignment completion:** Passing an online activity does not automatically change the assignment to complete; teacher/admin review and explicit approval are required.
-3. Assessment retake policy beyond the initial attempt and approved second attempt.
+3. **CONFIRMED — Assessment retakes:** One initial attempt is allowed; every additional attempt requires explicit teacher/admin approval.
 4. Password recovery method compatible with the no-email/no-paid-service constraint.
 5. Academy timezone and date-handling convention.
 6. Academic session naming and promotion/archiving process.
