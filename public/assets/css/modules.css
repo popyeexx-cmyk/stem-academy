@@ -38,3 +38,26 @@
   .activity-panel { padding: 14px; }
   .activity-panel .panel-heading, .activity-entry-top { align-items: flex-start; flex-direction: column; }
 }
+
+
+/* My Profile module */
+.profile-page { max-width: 1180px; margin: 0 auto; }
+.profile-hero { display: flex; align-items: center; gap: 20px; padding: 24px; margin: 20px 0; background: #fff; border: 1px solid #E5E7EB; border-radius: 14px; }
+.profile-avatar { width: 68px; height: 68px; flex: 0 0 68px; display: grid; place-items: center; border-radius: 50%; background: #EFF6FF; color: #2563EB; font-weight: 700; font-size: 1.3rem; }
+.profile-identity h2 { margin: 2px 0 5px; }
+.profile-identity p { margin: 0 0 8px; }
+.profile-status { display: inline-flex; align-items: center; gap: 7px; font-size: .8rem; color: #15803D; }
+.profile-status span { width: 7px; height: 7px; border-radius: 50%; background: #16A34A; }
+.profile-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr); gap: 18px; margin: 18px 0; }
+.profile-card, .profile-guidance { background: #fff; border: 1px solid #E5E7EB; border-radius: 14px; padding: 22px; }
+.profile-card h2, .profile-guidance h2 { margin: 0 0 6px; }
+.profile-card > .muted { margin: 0 0 18px; }
+.profile-form { display: flex; flex-direction: column; gap: 9px; }
+.profile-form .form-input { width: 100%; }
+.profile-form .dialog-actions { justify-content: flex-start; flex-wrap: wrap; margin-top: 8px; }
+.security-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 17px 0; border-top: 1px solid #E5E7EB; }
+.security-row p { margin: 5px 0 0; font-size: .88rem; }
+.security-lock { color: #6B7280; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 20px; padding: 4px 8px; font-size: .72rem; white-space: nowrap; }
+.profile-guidance { margin-top: 18px; }
+.profile-guidance ul { color: #6B7280; padding-left: 20px; line-height: 1.8; margin-bottom: 0; }
+@media (max-width: 760px) { .profile-grid { grid-template-columns: 1fr; } .profile-hero { padding: 18px; } }
