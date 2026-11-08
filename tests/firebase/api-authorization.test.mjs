@@ -67,6 +67,7 @@ test("class and subject API endpoint enforces authenticated scope", {
   const inactiveClassId = `api-inactive-class-${suffix}`;
   const physicsId = `api-physics-${suffix}`;
   const mathsId = `api-maths-${suffix}`;
+  const unassignedSubjectId = `api-unassigned-subject-${suffix}`;
   const inactiveSubjectId = `api-inactive-subject-${suffix}`;
 
   const classData = {
@@ -106,10 +107,11 @@ test("class and subject API endpoint enforces authenticated scope", {
     const inactiveClassRef = db.collection("classes").doc(inactiveClassId);
     const physicsRef = db.collection("subjects").doc(physicsId);
     const mathsRef = db.collection("subjects").doc(mathsId);
+    const unassignedSubjectRef = db.collection("subjects").doc(unassignedSubjectId);
     const inactiveSubjectRef = db.collection("subjects").doc(inactiveSubjectId);
     cleanupRefs.push(
       classRef, otherClassRef, inactiveClassRef,
-      physicsRef, mathsRef, inactiveSubjectRef
+      physicsRef, mathsRef, unassignedSubjectRef, inactiveSubjectRef
     );
 
     await Promise.all([
@@ -118,6 +120,7 @@ test("class and subject API endpoint enforces authenticated scope", {
       inactiveClassRef.set({ ...classData, active: false }),
       physicsRef.set(subjectData),
       mathsRef.set({ ...subjectData, name: "Synthetic Mathematics" }),
+      unassignedSubjectRef.set({ ...subjectData, name: "Synthetic Unassigned Subject" }),
       inactiveSubjectRef.set({ ...subjectData, active: false })
     ]);
 
@@ -190,7 +193,7 @@ test("class and subject API endpoint enforces authenticated scope", {
     });
 
     await t.test("teacher cannot read an unassigned subject", async () => {
-      const response = await callClassSubject(teacher.idToken, classId, inactiveSubjectId);
+      const response = await callClassSubject(teacher.idToken, classId, unassignedSubjectId);
       const payload = await response.json();
 
       assert.equal(response.status, 403);
