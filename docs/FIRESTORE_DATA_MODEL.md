@@ -193,3 +193,8 @@ Do not create a production Firebase project, enable student access, import real 
 5. Add indexes only for verified query patterns.
 6. Review privacy, backup, retention and recovery procedures.
 7. Only then configure a separate test Firebase project; production setup remains a later, explicit milestone.
+
+
+## Login protection
+
+**CONFIRMED — Login protection:** After 5 consecutive failed sign-in attempts, temporarily lock the student account for 15 minutes. An administrator may unlock it earlier only after verifying the student's identity in person. Track failed attempts and lockout state securely on the server; do not trust client-side counters, expose account-sensitive details in login errors, or log passwords. Apply rate limiting to reduce automated guessing and test lockout, expiry and admin-unlock behaviour.
