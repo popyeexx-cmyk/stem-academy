@@ -22,7 +22,7 @@
 
 | Collection | Document ID | Purpose and key fields |
 |---|---|---|
-| `users` | Firebase Auth UID | `role`, `active`, `displayName` (student full name), `email`, `studentId` (academy-generated for students), `createdAt`, `updatedAt`; avoid collecting extra profile fields unless a documented need is approved |
+| `users` | Firebase Auth UID | `role`, `active`, `displayName` (student full name), `authEmail` (system-generated alias for students), optional real `contactEmail` only if later approved, `studentId` (academy-generated for students), `createdAt`, `updatedAt`; avoid collecting extra profile fields unless a documented need is approved |
 | `classes` | Stable class ID | `name`, `grade`, `academicSessionId`, `active`, timestamps |
 | `classAccess` | Deterministic class/user ID | `classId`, `userUid`, `accessType` (teacher or student), `active`, timestamps; teacher access establishes class-level scope only |
 | `teachingAssignments` | Deterministic teacher/class/subject ID | `teacherUid`, `classId`, `subjectId`, `active`, `assignedBy`, timestamps; identifies exactly which subjects a teacher may manage in a class |
@@ -55,14 +55,25 @@ Deterministic IDs should use an unambiguous encoding or a stable hash of the com
 - **CONFIRMED — Multiple subjects per teacher:** An administrator may assign multiple subjects to the same teacher, including across different classes/grades. Each assignment is a separate `teachingAssignments` record tied to a specific teacher, class and subject. A teacher may act only within the exact active class/subject combinations assigned; assigning one subject does not imply access to other subjects in that class.
 - A teacher must not gain access to another class by changing a URL, query parameter or request body.
 
-## 4. Account password recovery
+## 4. Student sign-in identity
+
+- **CONFIRMED — SID-based student login:** Students sign in using their permanent academy-generated Student ID (SID) and password, not a real email address. The administrator creates each student account.
+- **CONFIRMED — Internal Firebase email alias:** To use Firebase Authentication email/password accounts without requiring students to own or verify an email address, generate a unique internal alias from the SID. Example: SID `SA-2026-001` maps to `sa-2026-001@students.stemacademy.invalid`. The reserved `.invalid` domain is intentionally non-deliverable. Do not use a student's real name in the alias.
+- The student-facing login form accepts SID and password. The frontend converts the normalized SID to the deterministic internal alias before calling Firebase Authentication; the password is passed only to Firebase Authentication over its supported secure SDK/API flow. Never store or log the password.
+- The alias is an authentication identifier, not a contact address. Do not send verification, password-reset or other email to it. Do not display it as the student's contact email.
+- Store the alias in the trusted user record as `authEmail` (or derive it consistently from the canonical SID); the canonical SID remains the academy-facing identifier. Enforce uniqueness and immutable SID assignment on the server.
+- **Pre-implementation compatibility gate:** Before committing to this design in a live Firebase project, test whether Firebase Authentication accepts the reserved `.invalid` domain for email/password account creation and sign-in. Use only a separate test Firebase project and synthetic test accounts. If Firebase rejects it, stop and return to design review; do not silently substitute a deliverable or real-looking domain.
+- Real contact email is not required for student account creation or login. If the academy later wants to store an optional contact email, approve that as a separate privacy decision; it must not be used for authentication or recovery by default.
+- The administrator creates the student account, verifies the student's identity through the academy's in-person process, and activates the account. Student email verification is not required.
+
+## 5. Account password recovery
 
 - **CONFIRMED — Recovery method:** Password recovery is admin-assisted. A student contacts the teacher/admin, who verifies the student's identity through an appropriate in-person or otherwise pre-established trusted process before initiating recovery.
 - Recovery must use a secure, admin-only Firebase Authentication recovery flow. Do not ask an admin to view, choose, or store a student's permanent password; do not store passwords or reset secrets in Firestore, application logs or audit metadata.
 - Because email delivery is excluded from the current scope, the exact secure hand-off of a Firebase-generated password-reset action link/code must be designed and tested before implementation. Do not send it through an unapproved channel or expose it in logs.
 - Record the recovery action, initiating admin and timestamp in the audit log, without recording the reset link/code or password.
 
-## 5. Sensitive assessment workflow
+## 6. Sensitive assessment workflow
 
 1. An assessment version is immutable once used by an attempt. Changes create a new version.
 2. Answer keys are stored separately from student-visible question content.
@@ -75,7 +86,7 @@ Deterministic IDs should use an unambiguous encoding or a stable hash of the com
 
 The attempt count, retake approval details and result-release workflow must be covered by automated tests before real use.
 
-## 6. Assignment workflow
+## 7. Assignment workflow
 
 - Physical task assignments record teacher review/completion; students do not upload files.
 - Online activity assignments may reference a short assessment (maximum 10 questions) and an adjustable passing threshold (proposed default 70%, subject to the approved specification).
@@ -83,7 +94,7 @@ The attempt count, retake approval details and result-release workflow must be c
 - Opening an external resource is not proof that it was read or watched.
 - Assignment records are per student, even when the assignment is distributed to a whole class.
 
-## 7. Attendance and dates
+## 8. Attendance and dates
 
 - Store the attendance date as a date-only value in the academy's approved timezone, not as a browser-local timestamp.
 - Store server-generated `createdAt`/`updatedAt` timestamps separately from the attendance date.
@@ -91,11 +102,11 @@ The attempt count, retake approval details and result-release workflow must be c
 - Attendance calculations must exclude non-attendance days.
 - **CONFIRMED — Academy timezone:** Use Pakistan Standard Time, IANA timezone `Asia/Karachi` (UTC+05:00), for attendance dates, assignment deadlines and assessment schedules. Store absolute event timestamps consistently (UTC/server timestamps) and interpret/display academy calendar dates and times in `Asia/Karachi`.
 
-## 8. Audit and privacy
+## 9. Audit and privacy
 
 Audit critical account, class, attendance, assignment, assessment, result-release and settings changes. Logs must be append-only through application code and must not contain passwords, bearer tokens, private keys, full assessment answer payloads or unnecessary personal details. Record enough safe metadata to identify the actor, action, target and time. Define retention and backup procedures before production; do not configure automatic deletion.
 
-## 9. Indexes and query strategy
+## 10. Indexes and query strategy
 
 The current `firestore.indexes.json` is intentionally empty. Add composite indexes only when implemented API queries require them. Likely query patterns include:
 - active class access by `userUid + accessType + active`;
@@ -109,7 +120,7 @@ The current `firestore.indexes.json` is intentionally empty. Add composite index
 
 These are candidate query patterns, not a final index list. Validate each index against actual queries and Firestore emulator tests. Keep result sets bounded and paginate.
 
-## 10. API authorization checklist
+## 11. API authorization checklist
 
 Every endpoint must specify:
 - authentication required or public;
@@ -122,7 +133,7 @@ Every endpoint must specify:
 
 The current API contains only health and authenticated-session routes. This document does not imply that the collections, workflows or endpoint authorization have been implemented.
 
-## 11. Decisions still required before database setup
+## 12. Decisions still required before database setup
 
 The following must be confirmed or explicitly accepted as launch blockers:
 1. **CONFIRMED — Staff accounts and subject permissions:** Use separate administrator and teacher accounts for two different staff members. The admin has academy-wide administration permissions; each teacher is limited to explicitly assigned classes and subjects. The administrator may assign multiple subjects to one teacher, including across grades/classes; permissions are granted and checked per teacher/class/subject combination.
@@ -133,15 +144,17 @@ The following must be confirmed or explicitly accepted as launch blockers:
 6. **CONFIRMED — Academy timezone:** Pakistan Standard Time (`Asia/Karachi`, UTC+05:00). Calendar dates and scheduled times use this academy timezone; store absolute timestamps consistently using UTC/server timestamps.
 7. **CONFIRMED — Academic sessions:** Annual sessions named by calendar year (for example, `2026`, `2027`), with separate Grade 9 and Grade 10 classes in each session. The student promotion and archival process still needs to be defined.
 8. **CONFIRMED — Student identifier:** Generate a permanent academy ID in the format `SA-YYYY-NNN` (for example, `SA-2026-001`) on the trusted server, where `YYYY` is the student's first enrollment/ID-issuance year. IDs must be unique academy-wide, non-editable by students and must not be based on national identity numbers.
-9. **CONFIRMED — Minimum student profile:** Full name, academy-generated Student ID, email address, grade/class association and active/inactive status only. Grade/class association is maintained through trusted class records/access. No guardian details, phone numbers, home addresses, identity numbers, photographs or other extra personal fields by default.
-10. **CONFIRMED — Backup approach:** Manual admin-initiated data export. The export format, scope, frequency, secure storage location and restore procedure must be defined and tested before production.
-11. **CONFIRMED — Retention policy:** Retain records indefinitely by default; archive inactive students and preserve historical attendance, assignments and results with access restricted to authorized staff. This remains subject to applicable privacy/legal requirements and approved deletion requests.
-12. **PROVISIONALLY SELECTED — Hosting provider:** Netlify Free, subject to account eligibility, current 300-credit usage model, supported Node.js runtime, deployed test, Firebase integration and realistic usage verification before production.
-13. **CONFIRMED — Student performance indicators:** Teachers define the attendance and assessment thresholds used to flag students who may need additional academic support. Flags are advisory prompts for teacher review only; they must not trigger automatic disciplinary action, student restrictions, or consequential decisions. Thresholds must be visible, editable by authorized teachers/admins, and documented with their effective dates.
+9. **CONFIRMED — Minimum student profile:** Full name, academy-generated Student ID, internal Firebase authentication alias, grade/class association and active/inactive status only. A real contact email is not required. If later approved, an optional contact email is stored separately and is not used for login or recovery by default. Grade/class association is maintained through trusted class records/access. No guardian details, phone numbers, home addresses, identity numbers, photographs or other extra personal fields by default.
+10. **CONFIRMED — Student login:** Students sign in using their SID and password. The administrator creates and activates accounts after in-person identity verification. The frontend maps the SID to a deterministic internal Firebase alias such as `sa-2026-001@students.stemacademy.invalid`; no email verification or email delivery is required. Firebase acceptance of `.invalid` must be proven with synthetic accounts in a separate test project before implementation. If rejected, pause for design review.
+11. **CONFIRMED — Email verification:** Student email verification is not required. The internal alias is not a real contact address. Password recovery remains admin-assisted.
+12. **CONFIRMED — Backup approach:** Manual admin-initiated data export. The export format, scope, frequency, secure storage location and restore procedure must be defined and tested before production.
+13. **CONFIRMED — Retention policy:** Retain records indefinitely by default; archive inactive students and preserve historical attendance, assignments and results with access restricted to authorized staff. This remains subject to applicable privacy/legal requirements and approved deletion requests.
+14. **PROVISIONALLY SELECTED — Hosting provider:** Netlify Free, subject to account eligibility, current 300-credit usage model, supported Node.js runtime, deployed test, Firebase integration and realistic usage verification before production.
+15. **CONFIRMED — Student performance indicators:** Teachers define the attendance and assessment thresholds used to flag students who may need additional academic support. Flags are advisory prompts for teacher review only; they must not trigger automatic disciplinary action, student restrictions, or consequential decisions. Thresholds must be visible, editable by authorized teachers/admins, and documented with their effective dates.
 
 Do not create a production Firebase project, enable student access, import real records or deploy this schema until the relevant decisions and provider constraints are reviewed.
 
-## 12. Hosting decision — provisional
+## 13. Hosting decision — provisional
 
 - **PROVISIONALLY SELECTED — Netlify Free:** The project owner selected Netlify Free as the preferred hosting option on 8 November 2026, subject to verification before any production deployment.
 - Netlify currently advertises its Free plan at $0 with a 300-credit monthly limit. Current credit documentation lists 15 credits per production deploy, 20 credits per GB of bandwidth, 10 credits per GB-hour of compute, and 2 credits per 10,000 web requests. Web requests include pages, assets and API/function requests. When the monthly limit is reached, sites are paused until the next billing cycle; the Free plan has hard limits and cannot incur overage charges. This means production deployments and normal traffic consume the same finite monthly allowance, so usage must be monitored.
@@ -150,14 +163,14 @@ Do not create a production Firebase project, enable student access, import real 
 - **Before approval:** verify account/team eligibility and current dashboard terms; pin a supported Node runtime; deploy only a non-production test site; test the API and Firebase Admin initialization using a separate test Firebase project; measure realistic usage; confirm the site pauses safely at the free limit; and document a no-cost rollback/hosting alternative. Do not enable real student access or deploy production data until these checks pass.
 - Official references checked 8 November 2026: [Netlify pricing](https://www.netlify.com/pricing/), [How credits work](https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/how-credits-work/), [Functions configuration and Node.js runtime](https://docs.netlify.com/build/functions/configuration/), [Node.js 24 default announcement](https://www.netlify.com/changelog/2026-07-07-nodejs-24-default-new-sites/).
 
-## 13. Student performance indicators
+## 14. Student performance indicators
 
 - **CONFIRMED — Teacher-defined thresholds:** Authorized teachers define attendance and assessment thresholds. The system may flag students for teacher review when those thresholds are met.
 - A flag is an advisory support signal, not a diagnosis, grade, disciplinary finding or automatic decision. A teacher must review the underlying records and decide whether any supportive action is appropriate.
 - Do not automatically penalize students, change marks, restrict access, notify guardians or label students as failing/risk categories solely because a threshold was crossed.
 - Store the threshold settings, who changed them and when. Show the underlying attendance/assessment period and values alongside each flag so staff can interpret it fairly.
 
-## 14. Implementation sequence after approval
+## 15. Implementation sequence after approval
 
 1. Confirm the open decisions and finalize this model.
 2. Add schema validation helpers and role/class authorization helpers.
