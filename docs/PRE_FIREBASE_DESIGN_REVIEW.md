@@ -151,3 +151,8 @@ That older prompt must not silently override the later approved STEM Academy Mas
 ### Login protection
 
 **POLICY APPROVED:** Lock a student account for 15 minutes after 5 consecutive failed sign-in attempts. An administrator may unlock it earlier after in-person identity verification. Enforce attempt counting and lockout on the server, avoid account-enumeration clues in login errors, protect secrets from logs, and test lockout, expiry and admin-unlock behaviour. Rate limiting is also required to mitigate automated guessing.
+
+
+### Staff password policy
+
+**POLICY APPROVED:** Administrator and teacher passwords require at least 12 characters; no arbitrary periodic expiry. Only the administrator may reset a teacher password. Implement a secure verified handoff, force a change after temporary-password use, and never log passwords. The administrator's own recovery procedure remains a separate design item so the academy cannot be permanently locked out.
