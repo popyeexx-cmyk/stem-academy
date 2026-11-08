@@ -147,3 +147,13 @@ This document defines the recommended permission baseline; it does not mean thes
 - The server generates and allocates IDs; staff and administrators cannot choose, edit or recycle them.
 - Staff sign in using their Staff ID and password. The Staff ID remains distinct from the Firebase Auth UID and internal Firebase authentication alias.
 - Implement a transaction-safe allocator and test concurrent issuance before creating real staff accounts.
+
+
+## 11. Newly approved operational permissions and controls
+
+- **Assignment deadlines:** Teachers manage deadlines for their assigned class/subject and may extend them for an individual student or the whole class. The server uses `Asia/Karachi` time and is authoritative. Deadline changes are audited.
+- **Assessment windows:** Teachers set opening/closing times and duration within their assigned scope. Server-side checks prevent starting outside the window and enforce the earlier of time-limit expiry or assessment closing. Retake approval rules remain unchanged.
+- **Attendance corrections:** Teachers may mark/correct attendance only in assigned classes; administrators may correct any class. A reason and immutable correction history are required. Students have no attendance-edit permission.
+- **Notices:** Teachers publish notices to assigned classes; administrators may publish academy-wide notices. Students may read and mark notices as read. There is no private chat or external message delivery.
+- **Technical exceptions:** A teacher may extend/reopen an assignment or assessment after a documented technical problem. Preserve attempt history and do not automatically change marks or attendance.
+- **Backups:** Only administrators may export and restore academy records. Backups exclude secrets, are encrypted before download, and restoration is restricted to the administrator under a tested recovery procedure.
