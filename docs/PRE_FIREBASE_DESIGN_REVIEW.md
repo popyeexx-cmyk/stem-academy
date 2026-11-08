@@ -28,7 +28,7 @@ The following are confirmed and should be treated as requirements, not suggestio
 | Academic sessions and rollover | Annual sessions named by calendar year, with separate Grade 9 and Grade 10 classes. The administrator manually confirms promotion, repetition, Grade 10 completion/archive or transfer/inactive status; no automatic rollover. Permanent SIDs and historical records are preserved. |
 | Student ID | Permanent server-generated `SA-YYYY-NNN`; year is first enrollment/ID-issuance year. |
 | Student profile and login | Full name, permanent SID, internal Firebase alias, grade/class association and active/inactive status only. A real contact email is not required. Students sign in with SID and password. |
-| Backups | Manual admin-initiated export; secure storage and tested restoration required. |
+| Backups | Administrator can export on demand; weekly backup reminder; include academic records and exclude credentials/secrets; secure storage and successful test restoration required before real data. |
 | Retention | Retain records indefinitely by default; archive inactive students and preserve history, subject to applicable privacy/legal requirements. |
 | Hosting | Netlify Free is provisionally selected, not yet approved for production. |
 | Student support indicators | Teachers define attendance/assessment warning thresholds and review periods. Suggested examples: attendance below 75%, assessment below 40%, reviewed over the current academic month. Configurable; flags are advisory only and require teacher review. |
@@ -74,7 +74,7 @@ The implementation must provide a review/confirmation summary, safely handle par
 
 ### 3.8 Manual backup and restoration
 
-A manual export is approved, but export scope, format, storage location, frequency, encryption/access protection, and restore procedure are not. Do not assume a provider-managed backup/export feature is available on the free plan. Design and test a bounded admin export/restore process that does not include passwords, tokens, reset links or service credentials. A backup that has never been restored in a test is not a verified recovery plan.
+**RESOLVED — Backup policy:** The administrator may export a backup on demand and should receive a reminder to perform one at least weekly. Include student records, class/session data, attendance, assignments, assessments, results and necessary academic history. Exclude passwords, authentication tokens, reset links, private keys and service credentials. The export format, secure storage location, access protection and restore procedure still need technical design. Do not assume a provider-managed backup/export feature is available on the free plan. Test a full restoration successfully before introducing real student data; a backup that has never been restored in a test is not a verified recovery plan.
 
 ### 3.9 Netlify Free remains conditional
 
@@ -103,7 +103,7 @@ These are the remaining questions or technical proofs. They are not reasons to s
 | 3 | Session rollover implementation | Implement and test the approved manual administrator workflow, including confirmation summary, historical record preservation, audit events and safe retry/partial-failure handling. |
 | 4 | Student ID allocator | Implement and test transaction-safe, never-recycled ID issuance. |
 | 5 | Support-indicator rules | **POLICY APPROVED:** teachers configure attendance/assessment warning thresholds and review periods; suggested examples are below 75% attendance, below 40% assessment performance, and the current academic month. Minimum evidence: 5 recorded attendance days for attendance warnings and 2 graded assessments for assessment warnings within the selected period. Below minimums, show insufficient data. Flags are advisory only. **RESOLVED — Recalculation:** recalculate when relevant attendance or assessment records change, and when a teacher changes a threshold or review period. Use normal API operations only; no cron jobs, scheduled functions, polling or background workers. |
-| 6 | Backup/restore | Approve export format, included collections, frequency, secure storage, encryption/access controls and a tested restore procedure. |
+| 6 | Backup/restore | **POLICY APPROVED:** on-demand admin export, weekly reminder, include academic records, exclude credentials/secrets. Technical design still required for export format, secure storage/access protection and a tested restore procedure before real data. |
 | 7 | Netlify runtime and free-tier proof | Pin exact Node.js version and complete a non-production deployment/usage test. |
 | 8 | Firebase test environment | Create a separate test project only after the preceding choices; use no real student data. |
 | 9 | Time/date behaviour | Define how due dates and scheduled assessments behave at day boundaries in `Asia/Karachi`, including late submissions and edits. |
