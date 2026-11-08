@@ -60,8 +60,8 @@ Deterministic IDs should use an unambiguous encoding or a stable hash of the com
 3. The API returns only the version fields needed by the student. It never serializes answer-key documents into student responses.
 4. A student can submit only an attempt belonging to their own UID and an assessment assigned to their active class.
 5. A student receives one initial attempt. A second attempt requires an explicit teacher/admin approval record. The approval actor and timestamp are stored.
-6. Calculated results remain hidden until an authorized teacher/admin approves release.
-7. Student result endpoints return only the authenticated student's released results.
+6. Teacher/admin approval of a calculated result and publication to students are separate actions. Approval alone does not make marks visible.
+7. Results remain hidden until an authorized teacher/admin performs the separate publish/release action. Student result endpoints return only the authenticated student's published results.
 8. Never trust a score, pass/fail flag, approval state or answer key sent by the browser; calculate and approve on the server.
 
 The attempt count, retake approval details and result-release workflow must be covered by automated tests before real use.
@@ -115,7 +115,7 @@ The current API contains only health and authenticated-session routes. This docu
 ## 10. Decisions still required before database setup
 
 The following must be confirmed or explicitly accepted as launch blockers:
-1. Whether students may see marks immediately after teacher approval, or only after a separate release action.
+1. **CONFIRMED — Result visibility:** Students may see assessment marks only after a teacher/admin separately publishes/releases the result. Teacher approval alone is not sufficient. This decision was confirmed by the project owner on 8 November 2026.
 2. Whether passing an online activity ever changes assignment status automatically; the proposed rule is **no**, teacher approval remains required.
 3. Assessment retake policy beyond the initial attempt and approved second attempt.
 4. Password recovery method compatible with the no-email/no-paid-service constraint.
