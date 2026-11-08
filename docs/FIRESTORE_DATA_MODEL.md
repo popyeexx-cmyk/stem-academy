@@ -41,8 +41,9 @@
 | `noticeStates` | Deterministic notice/user ID | `noticeId`, `userUid`, read-at and acknowledgement-at (separate states) |
 | `auditLogs` | Generated event ID | actor UID/role, action, target type/ID, timestamp, safe metadata; append-only through application routes |
 | `academySettings` | Fixed setting key | approved academy-level configuration only; never store secrets |
+| `systemCounters` | Fixed counter key | server-only monotonic counters for student and staff ID issuance; never reset or decrement |
 
-Deterministic IDs should use an unambiguous encoding or a stable hash of the component IDs. Do not build IDs by joining arbitrary user-entered strings.
+Deterministic IDs should use an unambiguous encoding or a stable hash of the component IDs. Do not build IDs by joining arbitrary user-entered strings. Student IDs (`SA-YYYY-NNN`) and staff IDs (`SA-ADM-NNN`, `SA-TCH-NNN`) are allocated by trusted server code using Firestore transactions against `systemCounters`. Student year is calculated in `Asia/Karachi`. A successful counter increment is never rolled back or reused, even if later account creation fails; gaps are acceptable. Browser clients cannot read or write counters.
 
 ## 3. Identity, roles and class authorization
 
@@ -222,7 +223,7 @@ Do not create a production Firebase project, enable student access, import real 
 
 ## Staff ID format
 
-**CONFIRMED — Staff ID format:** The administrator receives a system-generated ID in the format `SA-ADM-001`. Teachers receive system-generated IDs in the format `SA-TCH-001`, `SA-TCH-002`, and so on. Staff IDs are unique across the academy, permanent, immutable after issuance and never reused. The server must allocate IDs safely under concurrent account creation; clients must never choose or edit an ID. Keep the staff ID separate from the Firebase Auth UID and internal authentication alias. This is the approved format; implementation and collision/concurrency tests remain required.
+**CONFIRMED — Staff ID format:** The administrator receives a system-generated ID in the format `SA-ADM-001`. Teachers receive system-generated IDs in the format `SA-TCH-001`, `SA-TCH-002`, and so on. Staff IDs are unique across the academy, permanent, immutable after issuance and never reused. The server must allocate IDs safely under concurrent account creation; clients must never choose or edit an ID. Keep the staff ID separate from the Firebase Auth UID and internal authentication alias. The transaction-safe allocator is implemented in `netlify/functions/lib/id-allocator.mjs`; emulator tests cover concurrent issuance, prefixes, timezone year boundaries and invalid staff roles. Account-creation workflows must call this allocator server-side and must not accept a client-supplied ID.
 
 
 ## 13. Newly approved operating policies
