@@ -1,0 +1,18 @@
+
+{
+  "name": "stem-academy",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "description": "STEM Academy Learning Management System",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check netlify/functions/api.mjs && node --check netlify/functions/lib/firebase-admin.mjs && node --check netlify/functions/lib/auth-middleware.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.5.0"
+  }
+}
