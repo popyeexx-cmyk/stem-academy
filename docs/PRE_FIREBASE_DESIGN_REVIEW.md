@@ -68,7 +68,9 @@ The policy is approved, but the actual recovery mechanism is not. A Firebase pas
 
 ### 3.7 Academic-session rollover
 
-Annual sessions are approved, but the operational process is not. Define when a new session is opened, how Grade 9 students are promoted to Grade 10, how Grade 10 students are archived/completed, how repeaters/transfers are handled, and how prior class membership and historical records remain unchanged.
+**RESOLVED — Manual, administrator-controlled rollover:** The owner approved a manual process. At the start of a new annual session, the administrator reviews and confirms each student's placement: Grade 9 students who pass move to Grade 10; Grade 9 students who repeat remain in Grade 9; Grade 10 students who complete the year are archived; transferred students are marked inactive. There is no automatic promotion or archival. Student IDs remain permanent and unchanged. Prior class memberships and all historical attendance, assignments and results must remain preserved.
+
+The implementation must provide a review/confirmation summary, safely handle partial failures, prevent duplicate processing, and write audit events. A new session's class association is added without overwriting the previous session's records.
 
 ### 3.8 Manual backup and restoration
 
@@ -98,7 +100,7 @@ These are the remaining questions or technical proofs. They are not reasons to s
 |---|---|---|
 | 1 | Firebase alias compatibility | Test whether Firebase Authentication accepts the reserved `.invalid` domain for email/password account creation and sign-in using synthetic accounts in a separate test project. If rejected, pause for a revised design. |
 | 2 | Password recovery hand-off | Approve and test the secure no-email recovery mechanism. |
-| 3 | Session rollover | Define promotion, repeaters, transfers, Grade 10 completion and archive steps. |
+| 3 | Session rollover implementation | Implement and test the approved manual administrator workflow, including confirmation summary, historical record preservation, audit events and safe retry/partial-failure handling. |
 | 4 | Student ID allocator | Implement and test transaction-safe, never-recycled ID issuance. |
 | 5 | Online activity pass mark | Approve the default passing threshold (70% is only a proposal) and clarify whether it can vary by activity. |
 | 6 | Support-indicator rules | Define assessment/attendance observation periods, minimum data requirements and how often teachers review flags. |
