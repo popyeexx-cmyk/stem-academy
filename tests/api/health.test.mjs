@@ -32,3 +32,20 @@ test("Unknown endpoint returns 404", async () => {
 
   assert.equal(response.status, 404);
 });
+
+test("Protected session endpoint rejects requests without a bearer token", async () => {
+  const request = new Request(
+    "http://localhost/api/me",
+    { method: "GET" }
+  );
+
+  const response = await handler(request, {});
+
+  assert.equal(response.status, 401);
+
+  const result = await response.json();
+
+  assert.equal(result.error.code, "UNAUTHENTICATED");
+  assert.equal(result.error.message, "Authentication required.");
+  assert.equal(response.headers.get("Cache-Control"), "no-store");
+});
